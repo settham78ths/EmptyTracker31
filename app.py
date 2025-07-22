@@ -327,14 +327,8 @@ def cv_generator():
 @app.route('/ai-cv-generator')
 @login_required
 def ai_cv_generator():
-    """AI CV Generator page"""
+    """AI CV Generator page - Premium feature"""
     return render_template('ai_cv_generator.html')
-
-@app.route('/ai-personal-branding')
-@login_required
-def ai_personal_branding():
-    """AI Personal Branding Consultant page - exclusive AI feature"""
-    return render_template('ai_personal_branding.html')
 
 @app.route('/about')
 def about():
@@ -523,21 +517,21 @@ def upload_cv():
 
         # Validate CV quality
         validation_results = cv_validator.validate_cv(cv_text)
-
+        
         if not validation_results['is_valid']:
             return jsonify({
                 'success': False,
                 'message': 'CV nie spełnia wymagań jakości',
                 'validation_errors': validation_results['errors']
             }), 400
-
+        
         # Add validation warnings to notifications
         if validation_results['warnings']:
             notification_system.add_notification(
                 f"Uwagi dotyczące CV: {'; '.join(validation_results['warnings'])}", 
                 'warning'
             )
-
+        
         if validation_results['suggestions']:
             notification_system.add_notification(
                 f"Sugestie: {'; '.join(validation_results['suggestions'])}", 
@@ -730,7 +724,7 @@ def generate_ai_cv():
     """Generate complete CV using AI with professional templates"""
     try:
         data = request.get_json()
-
+        
         # Basic user input - minimal required
         basic_info = {
             'firstName': data.get('firstName', ''),
@@ -744,11 +738,11 @@ def generate_ai_cv():
             'template_style': data.get('template_style', 'modern_blue'),
             'brief_background': data.get('brief_background', '')  # 2-3 zdania o doświadczeniu
         }
-
+        
         # Sprawdź dostęp do funkcji
         is_developer = current_user.username == 'developer'
         is_premium_active = current_user.is_premium_active()
-
+        
         # Funkcja tylko dla Premium lub developer
         if not is_developer and not is_premium_active:
             return jsonify({
@@ -756,10 +750,10 @@ def generate_ai_cv():
                 'message': 'Automatyczne generowanie CV jest dostępne tylko dla użytkowników Premium.',
                 'premium_required': True
             }), 403
-
+        
         # Generate AI content based on basic info
         from utils.openrouter_api import generate_complete_cv_content
-
+        
         ai_cv_content = generate_complete_cv_content(
             target_position=basic_info['targetPosition'],
             experience_level=basic_info['experience_level'],
@@ -767,7 +761,7 @@ def generate_ai_cv():
             brief_background=basic_info['brief_background'],
             language='pl'
         )
-
+        
         # Parse AI response
         import json
         try:
@@ -775,7 +769,7 @@ def generate_ai_cv():
         except json.JSONDecodeError:
             # Fallback parsing
             cv_content = parse_ai_json_response(ai_cv_content)
-
+        
         # Combine basic info with AI-generated content
         complete_cv_data = {
             'firstName': basic_info['firstName'],
@@ -790,18 +784,18 @@ def generate_ai_cv():
             'skills': cv_content.get('skills_list', ''),
             'template_style': basic_info['template_style']
         }
-
+        
         # Generate PDF with selected template
         from utils.cv_templates import generate_cv_with_template
-
+        
         pdf_buffer = generate_cv_with_template(complete_cv_data, basic_info['template_style'])
-
+        
         # Encode as base64
         pdf_base64 = base64.b64encode(pdf_buffer.getvalue()).decode()
-
+        
         # Store in session for potential edits
         session['ai_generated_cv'] = complete_cv_data
-
+        
         return jsonify({
             'success': True,
             'cv_data': complete_cv_data,
@@ -809,7 +803,7 @@ def generate_ai_cv():
             'filename': f"AI_CV_{basic_info['firstName']}_{basic_info['lastName']}.pdf",
             'message': 'CV zostało wygenerowane przez AI z profesjonalnym szablonem!'
         })
-
+        
     except Exception as e:
         logger.error(f"Error generating AI CV: {str(e)}")
         return jsonify({
@@ -825,7 +819,7 @@ def create_ai_cv_payment():
         # Store request data for after payment
         cv_request_data = request.get_json()
         session['pending_ai_cv_data'] = cv_request_data
-
+        
         # Create payment intent for AI CV generation (29.99 PLN - same as Premium monthly)
         intent = stripe.PaymentIntent.create(
             amount=2999,  # 29.99 PLN
@@ -835,13 +829,13 @@ def create_ai_cv_payment():
                 'user_id': current_user.id
             }
         )
-
+        
         return jsonify({
             'success': True,
             'client_secret': intent.client_secret,
             'checkout_url': f'/checkout?client_secret={intent.client_secret}&service=ai_cv_generation'
         })
-
+        
     except Exception as e:
         logger.error(f"Error creating AI CV payment: {str(e)}")
         return jsonify({
@@ -1202,7 +1196,7 @@ def apply_recruiter_feedback():
 
         # Zastosuj poprawki rekrutera do CV
         from utils.openrouter_api import apply_recruiter_feedback_to_cv
-
+        
         ai_result = apply_recruiter_feedback_to_cv(
             cv_text, 
             recruiter_feedback, 
