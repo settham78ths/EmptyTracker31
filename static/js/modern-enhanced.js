@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (analyzeJobBtn) {
         analyzeJobBtn.addEventListener('click', analyzeJobPosting);
     }
-    
+
     // Initialize other UI elements
     initializeModernUI();
 });
@@ -15,19 +15,19 @@ document.addEventListener('DOMContentLoaded', function() {
 async function analyzeJobPosting() {
     const jobDescription = document.getElementById('job_description')?.value;
     const jobUrl = document.getElementById('job_url')?.value;
-    
+
     if (!jobDescription && !jobUrl) {
         showNotification('Podaj opis stanowiska lub URL oferty pracy', 'warning');
         return;
     }
-    
+
     const analyzeJobBtn = document.getElementById('analyzeJobBtn');
     const originalText = analyzeJobBtn.textContent;
-    
+
     try {
         analyzeJobBtn.textContent = 'Analizuję...';
         analyzeJobBtn.disabled = true;
-        
+
         const response = await fetch('/analyze-job-posting', {
             method: 'POST',
             headers: {
@@ -39,16 +39,16 @@ async function analyzeJobPosting() {
                 language: 'pl'
             })
         });
-        
+
         const result = await response.json();
-        
+
         if (result.success) {
             displayJobAnalysis(result.analysis);
             showNotification('Analiza stanowiska zakończona!', 'success');
         } else {
             showNotification(result.message || 'Błąd podczas analizy stanowiska', 'error');
         }
-        
+
     } catch (error) {
         console.error('Error analyzing job posting:', error);
         showNotification('Wystąpił błąd podczas analizy', 'error');
@@ -61,13 +61,13 @@ async function analyzeJobPosting() {
 function displayJobAnalysis(analysis) {
     const analysisContainer = document.getElementById('jobAnalysisResult');
     if (!analysisContainer) return;
-    
+
     let html = '<div class="job-analysis-results">';
-    
+
     if (analysis.job_title) {
         html += `<h4>Stanowisko: ${analysis.job_title}</h4>`;
     }
-    
+
     if (analysis.key_requirements) {
         html += '<h5>Kluczowe wymagania:</h5><ul>';
         analysis.key_requirements.forEach(req => {
@@ -75,7 +75,7 @@ function displayJobAnalysis(analysis) {
         });
         html += '</ul>';
     }
-    
+
     if (analysis.industry_keywords) {
         html += '<h5>Słowa kluczowe branżowe:</h5>';
         html += `<div class="keywords-tags">`;
@@ -84,7 +84,7 @@ function displayJobAnalysis(analysis) {
         });
         html += '</div>';
     }
-    
+
     html += '</div>';
     analysisContainer.innerHTML = html;
     analysisContainer.style.display = 'block';
@@ -97,7 +97,7 @@ function initializeModernUI() {
         element.addEventListener('mouseenter', showTooltip);
         element.addEventListener('mouseleave', hideTooltip);
     });
-    
+
     // Initialize smooth scrolling
     const smoothScrollLinks = document.querySelectorAll('a[href^="#"]');
     smoothScrollLinks.forEach(link => {
@@ -110,7 +110,7 @@ function showTooltip(event) {
     tooltip.className = 'tooltip-popup';
     tooltip.textContent = event.target.dataset.tooltip;
     document.body.appendChild(tooltip);
-    
+
     const rect = event.target.getBoundingClientRect();
     tooltip.style.left = rect.left + 'px';
     tooltip.style.top = (rect.top - tooltip.offsetHeight - 10) + 'px';
@@ -127,7 +127,7 @@ function smoothScrollTo(event) {
     event.preventDefault();
     const targetId = event.target.getAttribute('href').substring(1);
     const targetElement = document.getElementById(targetId);
-    
+
     if (targetElement) {
         targetElement.scrollIntoView({
             behavior: 'smooth',
@@ -143,9 +143,9 @@ function showNotification(message, type = 'info') {
         <span>${message}</span>
         <button onclick="this.parentElement.remove()" class="notification-close">&times;</button>
     `;
-    
+
     document.body.appendChild(notification);
-    
+
     // Auto remove after 5 seconds
     setTimeout(() => {
         if (notification.parentElement) {
@@ -171,7 +171,7 @@ class CVOptimizerPro {
         this.jobTitleInput = document.getElementById('job-title');
         this.jobDescriptionInput = document.getElementById('job-description');
         this.jobUrlInput = document.getElementById('job-url');
-        
+
         // CV text elements
         this.cvPreview = document.getElementById('cv-preview');
         this.cvEditor = document.getElementById('cv-editor');
@@ -179,7 +179,7 @@ class CVOptimizerPro {
         this.editCvBtn = document.getElementById('edit-cv-btn');
         this.saveCvBtn = document.getElementById('save-cv-btn');
         this.cancelEditBtn = document.getElementById('cancel-edit-btn');
-        
+
         // Result elements
         this.resultContainer = document.getElementById('result-container');
         this.loadingState = document.getElementById('loading-state');
@@ -234,7 +234,7 @@ class CVOptimizerPro {
         cards.forEach((card, index) => {
             card.style.opacity = '0';
             card.style.transform = 'translateY(20px)';
-            
+
             setTimeout(() => {
                 card.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
                 card.style.opacity = '1';
@@ -246,12 +246,12 @@ class CVOptimizerPro {
     onFileSelected() {
         if (this.cvFileInput.files.length > 0) {
             const file = this.cvFileInput.files[0];
-            
+
             // Validate file
             if (!this.validateFile(file)) {
                 return;
             }
-            
+
             // Update UI
             this.updateProcessButton(true);
             this.showNotification('Plik wybrany! Gotowy do przesłania.', 'success');
@@ -261,19 +261,19 @@ class CVOptimizerPro {
     validateFile(file) {
         const maxSize = 16 * 1024 * 1024; // 16MB
         const allowedTypes = ['application/pdf'];
-        
+
         if (!allowedTypes.includes(file.type)) {
             this.showNotification('Proszę wybrać plik PDF.', 'error');
             this.cvFileInput.value = '';
             return false;
         }
-        
+
         if (file.size > maxSize) {
             this.showNotification('Plik jest za duży. Maksymalny rozmiar to 16MB.', 'error');
             this.cvFileInput.value = '';
             return false;
         }
-        
+
         return true;
     }
 
@@ -288,22 +288,22 @@ class CVOptimizerPro {
 
     async handleCVUpload(e) {
         e.preventDefault();
-        
+
         if (this.isProcessing) return;
-        
+
         const formData = new FormData(this.cvForm);
-        
+
         try {
             this.isProcessing = true;
             this.showLoadingState('Przesyłanie CV...');
-            
+
             const response = await fetch('/upload-cv', {
                 method: 'POST',
                 body: formData
             });
-            
+
             const data = await response.json();
-            
+
             if (data.success) {
                 this.cvText = data.cv_text;
                 this.displayCVText(data.cv_text);
@@ -323,20 +323,20 @@ class CVOptimizerPro {
 
     async handleProcessCV() {
         if (this.isProcessing || !this.cvText) return;
-        
+
         const selectedOption = document.querySelector('input[name="optimization-option"]:checked')?.value;
         const selectedLanguage = document.querySelector('input[name="language"]:checked')?.value || 'pl';
-        
+
         if (!selectedOption) {
             this.showNotification('Proszę wybrać opcję analizy.', 'warning');
             return;
         }
-        
+
         // Validate required fields
         if (!this.validateRequiredFields(selectedOption)) {
             return;
         }
-        
+
         const requestData = {
             cv_text: this.cvText,
             job_title: this.jobTitleInput?.value.trim() || '',
@@ -345,11 +345,11 @@ class CVOptimizerPro {
             selected_option: selectedOption,
             language: selectedLanguage
         };
-        
+
         try {
             this.isProcessing = true;
             this.showProcessingState();
-            
+
             const response = await fetch('/process-cv', {
                 method: 'POST',
                 headers: {
@@ -357,9 +357,9 @@ class CVOptimizerPro {
                 },
                 body: JSON.stringify(requestData)
             });
-            
+
             const data = await response.json();
-            
+
             if (data.success) {
                 this.displayResults(data.result, selectedOption);
                 this.enableResultActions();
@@ -383,7 +383,7 @@ class CVOptimizerPro {
     validateRequiredFields(selectedOption) {
         const requiresJobDescription = ['optimize', 'cover_letter', 'feedback', 'ats_check', 'interview_questions', 'keyword_analysis'];
         const requiresJobTitle = ['position_optimization'];
-        
+
         if (requiresJobDescription.includes(selectedOption)) {
             const hasJobDescription = this.jobDescriptionInput?.value.trim() || this.jobUrlInput?.value.trim();
             if (!hasJobDescription) {
@@ -391,14 +391,14 @@ class CVOptimizerPro {
                 return false;
             }
         }
-        
+
         if (requiresJobTitle.includes(selectedOption)) {
             if (!this.jobTitleInput?.value.trim()) {
                 this.showNotification('Ta opcja wymaga nazwy stanowiska.', 'warning');
                 return false;
             }
         }
-        
+
         return true;
     }
 
@@ -416,14 +416,14 @@ class CVOptimizerPro {
 
     displayResults(result, optionType) {
         if (!this.resultContainer) return;
-        
+
         let formattedResult = this.formatResultByType(result, optionType);
         this.resultContainer.innerHTML = formattedResult;
-        
+
         // Smooth reveal animation
         this.resultContainer.style.opacity = '0';
         this.resultContainer.style.transform = 'translateY(20px)';
-        
+
         setTimeout(() => {
             this.resultContainer.style.transition = 'all 0.6s ease';
             this.resultContainer.style.opacity = '1';
@@ -440,7 +440,7 @@ class CVOptimizerPro {
             'ats_check': this.formatATSResult.bind(this),
             'interview_questions': this.formatInterviewQuestions.bind(this)
         };
-        
+
         const formatter = typeFormatters[optionType] || this.formatGenericResult.bind(this);
         return formatter(result);
     }
@@ -550,11 +550,11 @@ class CVOptimizerPro {
         try {
             const text = this.resultContainer.innerText;
             await navigator.clipboard.writeText(text);
-            
+
             const originalHtml = this.copyResultBtn.innerHTML;
             this.copyResultBtn.innerHTML = '<i class="fas fa-check me-1"></i>Skopiowano!';
             this.copyResultBtn.classList.add('btn-success');
-            
+
             setTimeout(() => {
                 this.copyResultBtn.innerHTML = originalHtml;
                 this.copyResultBtn.classList.remove('btn-success');
@@ -572,14 +572,14 @@ class CVOptimizerPro {
         notification.style.right = '20px';
         notification.style.zIndex = '9999';
         notification.style.minWidth = '300px';
-        
+
         notification.innerHTML = `
             ${message}
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         `;
-        
+
         document.body.appendChild(notification);
-        
+
         // Auto-remove after 5 seconds
         setTimeout(() => {
             if (notification.parentNode) {
@@ -615,14 +615,14 @@ class CVOptimizerPro {
                 </div>
             </div>
         `;
-        
+
         document.body.insertAdjacentHTML('beforeend', modalHtml);
         return document.getElementById('paymentModal');
     }
 
     setupAutoSave() {
         const inputs = [this.jobTitleInput, this.jobDescriptionInput, this.jobUrlInput];
-        
+
         inputs.forEach(input => {
             if (input) {
                 input.addEventListener('input', this.debounce(() => {
@@ -630,7 +630,7 @@ class CVOptimizerPro {
                 }, 1000));
             }
         });
-        
+
         this.loadFromLocalStorage();
     }
 
@@ -640,14 +640,14 @@ class CVOptimizerPro {
             jobDescription: this.jobDescriptionInput?.value || '',
             jobUrl: this.jobUrlInput?.value || ''
         };
-        
+
         localStorage.setItem('cvOptimizerData', JSON.stringify(data));
     }
 
     loadFromLocalStorage() {
         try {
             const data = JSON.parse(localStorage.getItem('cvOptimizerData') || '{}');
-            
+
             if (this.jobTitleInput && data.jobTitle) {
                 this.jobTitleInput.value = data.jobTitle;
             }

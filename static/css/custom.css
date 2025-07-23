@@ -4,6 +4,15 @@
 .cv-formatted {
     line-height: 1.6;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    white-space: pre-line;
+    word-wrap: break-word;
+}
+
+.cv-formatted pre {
+    white-space: pre-line;
+    font-family: inherit;
+    margin: 0;
+    padding: 0;
 }
 
 .cv-formatted h5 {

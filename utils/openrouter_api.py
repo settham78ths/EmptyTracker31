@@ -901,9 +901,48 @@ def optimize_cv(cv_text, job_description, language='pl', is_premium=False, payme
         - Dodaj profesjonalne podsumowanie zawodowe
         - Uporządkuj umiejętności w logiczne kategorie
         - Zastosuj czytelne i spójne formatowanie
+        
+    WYMAGANIA FORMATOWANIA:
+        - Używaj prawidłowych znaków nowej linii zamiast \\n
+        - Pozostaw puste linie między sekcjami dla lepszej czytelności
+        - Zachowaj logiczną strukturę: nagłówek, kontakt, podsumowanie, doświadczenie, umiejętności, edukacja
+        - Każdy punkt doświadczenia powinien rozpoczynać się od myślnika (-)
+        - Sekcje powinny być wyraźnie oddzielone
         """
 
     return send_api_request(prompt, max_tokens=max_tokens, language=language)
+
+def format_cv_text(cv_text):
+    """
+    Formatuje tekst CV dla lepszej czytelności, zastępując \n rzeczywistymi znakami nowej linii
+    i dodając odpowiednie odstępy między sekcjami
+    """
+    if not cv_text:
+        return cv_text
+    
+    # Zastąp \n rzeczywistymi znakami nowej linii
+    formatted_text = cv_text.replace('\\n', '\n')
+    
+    # Dodaj dodatkowe odstępy między głównymi sekcjami
+    sections = [
+        'DOŚWIADCZENIE ZAWODOWE',
+        'UMIEJĘTNOŚCI', 
+        'EDUKACJA',
+        'WYKSZTAŁCENIE',
+        'ZAINTERESOWANIA',
+        'EXPERIENCE',
+        'SKILLS',
+        'EDUCATION'
+    ]
+    
+    for section in sections:
+        formatted_text = formatted_text.replace(f'\n{section}', f'\n\n{section}')
+    
+    # Usuń nadmiarowe puste linie (więcej niż 2 pod rząd)
+    while '\n\n\n' in formatted_text:
+        formatted_text = formatted_text.replace('\n\n\n', '\n\n')
+    
+    return formatted_text.strip()
 
 def generate_recruiter_feedback(cv_text, job_description="", language='pl'):
     """
