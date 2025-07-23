@@ -204,24 +204,24 @@
         .hero-title {
             font-size: 2.8rem;
         }
-
+        
         .ai-badge {
             display: block;
             margin: 15px auto 0;
             width: fit-content;
         }
-
+        
         .hero-stats {
             flex-direction: column;
             align-items: center;
             gap: 20px;
         }
-
+        
         .stat-item {
             width: 100%;
             max-width: 200px;
         }
-
+        
         .cta-buttons {
             flex-direction: column;
             align-items: center;
@@ -254,9 +254,9 @@
                         <p class="hero-subtitle mb-4">
                             Optymalizuj swoje CV za pomocą sztucznej inteligencji i zwiększ szanse na otrzymanie wymarzonej pracy o nawet 70%
                         </p>
+                        
 
-
-
+                        
                         <div class="cta-buttons">
                             {% if current_user.is_authenticated %}
                                 <a href="{{ url_for('payment_options') }}" class="cta-primary">
@@ -294,7 +294,7 @@
                 <div class="card-body">
                     <h2 class="h4 text-primary mb-3 text-center">Wyniki naszej platformy</h2>
                     <p class="text-muted text-center mb-4">Dołącz do tysięcy zadowolonych użytkowników którzy zwiększyli swoje szanse na otrzymanie wymarzonej pracy</p>
-
+                    
                     <div class="row mt-4">
                         <div class="col-md-4 text-center mb-3">
                             <div class="display-4 fw-bold text-success mb-2">5,000+</div>
@@ -324,7 +324,7 @@
                 <div class="card-body">
                     <h2 class="h4 text-primary mb-3 text-center">Jak działa CV Optimizer Pro?</h2>
                     <p class="text-muted text-center mb-4">Nasza platforma wykorzystuje zaawansowaną sztuczną inteligencję do analizy i optymalizacji Twojego CV.</p>
-
+                    
                     <div class="row mt-4">
                         <div class="col-md-4 text-center mb-3">
                             <i class="fas fa-upload fa-2x text-primary mb-2"></i>
@@ -409,11 +409,11 @@
                             <i class="fas fa-upload me-2"></i>Prześlij CV
                         </button>
                     </form>
-
+                    
                     <div id="upload-success" class="alert alert-success mt-3" style="display: none;">
                         <i class="fas fa-check-circle me-2"></i>CV zostało pomyślnie przesłane!
                     </div>
-
+                    
                     <div id="upload-error" class="alert alert-danger mt-3" style="display: none;">
                         <i class="fas fa-exclamation-circle me-2"></i>
                         <span id="error-message">Błąd podczas przesyłania CV</span>
@@ -458,12 +458,12 @@
                         <label for="job-title" class="form-label">Stanowisko</label>
                         <input type="text" class="form-control" id="job-title" placeholder="np. Senior Developer">
                     </div>
-
+                    
                     <div class="mb-3">
                         <label for="job-description" class="form-label">Opis stanowiska</label>
                         <textarea class="form-control" id="job-description" rows="4" placeholder="Wklej opis stanowiska..."></textarea>
                     </div>
-
+                    
                     <div class="mb-3">
                         <label for="job-url" class="form-label">Link do oferty (opcjonalnie)</label>
                         <input type="url" class="form-control" id="job-url" placeholder="https://pracuj.pl/praca/...">
@@ -472,7 +472,7 @@
                 </div>
             </div>
         </div>
-
+        
         <!-- Prawa kolumna: Opcje i wyniki -->
         <div class="col-lg-6">
             <!-- Opcje optymalizacji -->
@@ -489,7 +489,7 @@
                                 <small class="text-muted">Ulepsz CV pod konkretne stanowisko</small>
                             </label>
                         </div>
-
+                        
                         <div class="form-check mb-2">
                             <input class="form-check-input" type="radio" name="optimization-option" id="feedback" value="feedback">
                             <label class="form-check-label" for="feedback">
@@ -497,7 +497,7 @@
                                 <small class="text-muted">Otrzymaj feedback jak od prawdziwego rekrutera</small>
                             </label>
                         </div>
-
+                        
                         <div class="form-check mb-2">
                             <input class="form-check-input" type="radio" name="optimization-option" id="cover_letter" value="cover_letter">
                             <label class="form-check-label" for="cover_letter">
@@ -505,7 +505,7 @@
                                 <small class="text-muted">Wygeneruj spersonalizowany list</small>
                             </label>
                         </div>
-
+                        
                         <div class="form-check mb-2">
                             <input class="form-check-input" type="radio" name="optimization-option" id="cv_score" value="cv_score">
                             <label class="form-check-label" for="cv_score">
@@ -513,7 +513,7 @@
                                 <small class="text-muted">Szczegółowa ocena i rekomendacje</small>
                             </label>
                         </div>
-
+                        
                         <div class="form-check mb-2">
                             <input class="form-check-input" type="radio" name="optimization-option" id="ats_check" value="ats_check">
                             <label class="form-check-label" for="ats_check">
@@ -521,7 +521,7 @@
                                 <small class="text-muted">Sprawdź kompatybilność z systemami ATS</small>
                             </label>
                         </div>
-
+                        
                         <div class="form-check mb-2">
                             <input class="form-check-input" type="radio" name="optimization-option" id="interview_questions" value="interview_questions">
                             <label class="form-check-label" for="interview_questions">
@@ -529,7 +529,7 @@
                                 <small class="text-muted">Przewidywane pytania rekrutacyjne</small>
                             </label>
                         </div>
-
+                        
                         <div class="form-check mb-2">
                             <input class="form-check-input" type="radio" name="optimization-option" id="keyword_analysis" value="keyword_analysis">
                             <label class="form-check-label" for="keyword_analysis">
@@ -537,7 +537,7 @@
                                 <small class="text-muted">Porównanie z wymaganiami oferty</small>
                             </label>
                         </div>
-
+                        
                         <div class="form-check mb-2">
                             <input class="form-check-input" type="radio" name="optimization-option" id="grammar_check" value="grammar_check">
                             <label class="form-check-label" for="grammar_check">
@@ -546,11 +546,11 @@
                             </label>
                         </div>
                     </div>
-
+                    
                     <button id="process-button" class="btn btn-success w-100" disabled>
                         <i class="fas fa-play me-2"></i>Rozpocznij analizę
                     </button>
-
+                    
                     <div id="processing-indicator" class="text-center mt-3" style="display: none;">
                         <div class="spinner-border text-primary" role="status">
                             <span class="visually-hidden">Ładowanie...</span>
