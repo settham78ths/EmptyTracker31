@@ -42,10 +42,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Get analyze buttons - only if they exist
-    const analyzeJobBtn = document.getElementById('analyzeJobBtn');
-    const analyzeUrlBtn = document.getElementById('analyzeUrlBtn');
-
     // Upload form handler
     if (cvUploadForm) {
         cvUploadForm.addEventListener('submit', function(e) {
@@ -89,8 +85,11 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Analyze job description button - tylko jeśli istnieje
+    // Get analyze buttons - only if they exist
     const analyzeJobBtn = document.getElementById('analyzeJobBtn');
+    const analyzeUrlBtn = document.getElementById('analyzeUrlBtn');
+
+    // Analyze job description button - tylko jeśli istnieje
     if (analyzeJobBtn) {
         analyzeJobBtn.addEventListener('click', function() {
             analyzeJobDescription();
@@ -98,7 +97,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Analyze URL button - tylko jeśli istnieje  
-    const analyzeUrlBtn = document.getElementById('analyzeUrlBtn');
     if (analyzeUrlBtn) {
         analyzeUrlBtn.addEventListener('click', function() {
             extractFromJobUrl();
@@ -374,6 +372,9 @@ document.addEventListener('DOMContentLoaded', function() {
             const previewHeader = '<div class="alert alert-info mb-2"><i class="fas fa-info-circle me-2"></i><strong>Podgląd oryginalnego CV</strong> - wybierz opcję analizy poniżej, aby otrzymać zoptymalizowaną wersję</div>';
             cvTextDisplay.innerHTML = previewHeader + '<pre style="white-space: pre-wrap; font-family: inherit; margin: 0;">' + text.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</pre>';
         }
+        
+        // Włącz przycisk przetwarzania po pomyślnym przesłaniu CV
+        enableProcessing();
     }
 
     function displayResult(result, optionType) {
@@ -545,10 +546,13 @@ document.addEventListener('DOMContentLoaded', function() {
         if (processButton) {
             processButton.disabled = false;
         }
-        // Show analysis options
-        const analysisOptions = document.getElementById('analysis-options');
-        if (analysisOptions) {
-            analysisOptions.style.display = 'block';
+        // Show analysis options - zmienione na poprawny selektor
+        const analysisOptionsCard = document.querySelector('.card-body .form-check input[name="optimization-option"]');
+        if (analysisOptionsCard) {
+            const analysisContainer = analysisOptionsCard.closest('.card');
+            if (analysisContainer) {
+                analysisContainer.style.display = 'block';
+            }
         }
     }
 
