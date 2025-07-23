@@ -85,10 +85,10 @@
                                 </a>
                             </li>
                             
-                            <!-- Bezpośredni link do profilu - bardziej widoczny -->
+                            <!-- Bezpośredni link do profilu - BARDZO widoczny -->
                             <li class="nav-item">
-                                <a class="nav-link btn btn-outline-primary me-2" href="{{ url_for('profile') }}">
-                                    <i class="fas fa-user me-1"></i>Mój Profil
+                                <a class="nav-link btn btn-primary me-3 px-4 py-2" href="{{ url_for('profile') }}" style="background: linear-gradient(45deg, #667eea, #764ba2); border: none; border-radius: 25px; font-weight: 600; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);">
+                                    <i class="fas fa-user-circle me-2"></i>👤 MÓJ PROFIL
                                 </a>
                             </li>
                             
@@ -127,9 +127,9 @@
                                     <i class="fas fa-user-circle me-1"></i>{{ current_user.get_full_name() or current_user.username }}
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end">
-                                    <li><h6 class="dropdown-header">Konto</h6></li>
-                                    <li><a class="dropdown-item" href="{{ url_for('profile') }}">
-                                        <i class="fas fa-user me-2"></i>Mój profil
+                                    <li><h6 class="dropdown-header">👤 Konto użytkownika</h6></li>
+                                    <li><a class="dropdown-item fw-bold text-primary" href="{{ url_for('profile') }}">
+                                        <i class="fas fa-user-circle me-2"></i>📋 Mój profil
                                     </a></li>
                                     <li><a class="dropdown-item" href="{{ url_for('edit_profile') }}">
                                         <i class="fas fa-edit me-2"></i>Edytuj profil
