@@ -78,27 +78,35 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto">
                         {% if current_user.is_authenticated %}
-                            <!-- Debug: User is authenticated -->
                             <!-- Główne funkcje -->
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ url_for('index') }}">
                                     <i class="fas fa-home me-1"></i>Strona główna
                                 </a>
                             </li>
+                            
+                            <!-- Bezpośredni link do profilu - bardziej widoczny -->
+                            <li class="nav-item">
+                                <a class="nav-link btn btn-outline-primary me-2" href="{{ url_for('profile') }}">
+                                    <i class="fas fa-user me-1"></i>Mój Profil
+                                </a>
+                            </li>
+                            
                             <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="cvDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fas fa-magic me-1"></i>Stwórz CV
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="cvDropdown">
-                                <li><a class="dropdown-item" href="{{ url_for('cv_generator') }}">
-                                    <i class="fas fa-edit me-2"></i>Kreator CV
-                                </a></li>
-                                <li><a class="dropdown-item" href="{{ url_for('ai_cv_generator') }}">
-                                    <i class="fas fa-robot me-2"></i>AI Generator 
-                                    <span class="badge bg-warning text-dark ms-1">Premium</span>
-                                </a></li>
-                            </ul>
-                        </li>
+                                <a class="nav-link dropdown-toggle" href="#" id="cvDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fas fa-magic me-1"></i>Stwórz CV
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="cvDropdown">
+                                    <li><a class="dropdown-item" href="{{ url_for('cv_generator') }}">
+                                        <i class="fas fa-edit me-2"></i>Kreator CV
+                                    </a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for('ai_cv_generator') }}">
+                                        <i class="fas fa-robot me-2"></i>AI Generator 
+                                        <span class="badge bg-warning text-dark ms-1">Premium</span>
+                                    </a></li>
+                                </ul>
+                            </li>
+                            
                             {% if current_user.is_premium_active() %}
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ url_for('premium_dashboard') }}">
@@ -106,6 +114,7 @@
                                 </a>
                             </li>
                             {% endif %}
+                            
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ url_for('payment_options') }}">
                                     <i class="fas fa-credit-card me-1"></i>Płatności
@@ -114,10 +123,11 @@
 
                             <!-- Menu użytkownika -->
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     <i class="fas fa-user-circle me-1"></i>{{ current_user.get_full_name() or current_user.username }}
                                 </a>
-                                <ul class="dropdown-menu">
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li><h6 class="dropdown-header">Konto</h6></li>
                                     <li><a class="dropdown-item" href="{{ url_for('profile') }}">
                                         <i class="fas fa-user me-2"></i>Mój profil
                                     </a></li>
