@@ -1,4 +1,3 @@
-
 // CV Optimizer Pro - Main JavaScript
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize variables
@@ -13,11 +12,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const jobTitleInput = document.getElementById('job-title');
     const jobDescriptionInput = document.getElementById('job-description');
     const jobUrlInput = document.getElementById('job-url');
-    
+
     // Buttons
     const processButton = document.getElementById('process-button');
     const uploadBtn = document.getElementById('upload-btn');
-    
+
     // Results and displays
     const resultContainer = document.getElementById('result-container');
     const resultText = document.getElementById('result-text');
@@ -113,7 +112,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const formData = new FormData();
         let hasInput = false;
-        
+
         // Check for file input
         if (cvFileInput?.files?.length > 0) {
             const file = cvFileInput.files[0];
@@ -124,23 +123,23 @@ document.addEventListener('DOMContentLoaded', function() {
             formData.append('cv_file', file);
             hasInput = true;
         }
-        
+
         // Check for text input
         if (cvTextInput?.value?.trim()) {
             formData.append('cv_text', cvTextInput.value.trim());
             hasInput = true;
         }
-        
+
         if (!hasInput) {
             showError('Wybierz plik CV lub wklej tekst CV');
             return;
         }
-        
+
         // Add optional fields
         if (jobTitleInput?.value) {
             formData.append('job_title', jobTitleInput.value);
         }
-        
+
         if (jobDescriptionInput?.value) {
             formData.append('job_description', jobDescriptionInput.value);
         }
@@ -195,7 +194,7 @@ document.addEventListener('DOMContentLoaded', function() {
             showError('Analiza już w toku, proszę czekać...');
             return;
         }
-        
+
         if (!cvText) {
             showError('Najpierw prześlij CV');
             return;
@@ -268,7 +267,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Analyze job description - optimized
     function analyzeJobDescription() {
         const jobDescription = jobDescriptionInput?.value?.trim();
-        
+
         if (!jobDescription) {
             showError('Wprowadź opis stanowiska do analizy');
             return;
@@ -325,7 +324,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Extract from job URL
     function extractFromJobUrl() {
         const jobUrl = jobUrlInput ? jobUrlInput.value.trim() : '';
-        
+
         if (!jobUrl) {
             showError('Wprowadź URL oferty pracy');
             return;
@@ -369,18 +368,20 @@ document.addEventListener('DOMContentLoaded', function() {
             cvPreview.style.display = 'block';
         }
         if (cvTextDisplay) {
-            cvTextDisplay.textContent = text;
+            // Dodaj jasne oznaczenie, że to oryginalne CV
+            const previewHeader = '<div class="alert alert-info mb-2"><i class="fas fa-info-circle me-2"></i><strong>Podgląd oryginalnego CV</strong> - wybierz opcję analizy poniżej, aby otrzymać zoptymalizowaną wersję</div>';
+            cvTextDisplay.innerHTML = previewHeader + '<pre style="white-space: pre-wrap; font-family: inherit; margin: 0;">' + text.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</pre>';
         }
     }
 
     function displayResult(result, optionType) {
         if (!resultContainer || !resultText) return;
-        
+
         resultContainer.style.display = 'block';
-        
+
         // Clear previous result first
         resultText.innerHTML = '<div class="spinner-border spinner-border-sm me-2" role="status"></div>Formatowanie wyniku...';
-        
+
         // Use setTimeout to prevent UI blocking
         setTimeout(() => {
             try {
@@ -389,7 +390,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 } else {
                     resultText.innerHTML = formatTextResult(result);
                 }
-                
+
                 // Scroll to result
                 resultContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
             } catch (error) {
@@ -422,7 +423,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function formatObjectResult(result, optionType) {
         let html = '<div class="result-content">';
-        
+
         if (optionType === 'cv_score' && result.score) {
             html += `<div class="score-display">
                 <h4>Ocena CV: ${result.score}/100</h4>
@@ -450,9 +451,20 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         if (result.optimized_cv || result.improved_cv) {
+            const optimizedCV = result.optimized_cv || result.improved_cv;
+            // Escape HTML and quotes for safe display
+            const escapedCV = optimizedCV.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            const safeCV = optimizedCV.replace(/'/g, '\\\'').replace(/"/g, '\\"').replace(/\n/g, '\\n');
+
             html += `<div class="optimized-cv-section">
-                <h5>Zoptymalizowane CV:</h5>
-                <pre style="white-space: pre-wrap; font-family: inherit;">${result.optimized_cv || result.improved_cv}</pre>
+                <div class="alert alert-success mb-3">
+                    <i class="fas fa-magic me-2"></i>
+                    <strong>Nowe, zoptymalizowane CV:</strong>
+                </div>
+                <pre style="white-space: pre-wrap; font-family: inherit; background: #f8f9fa; padding: 15px; border-radius: 8px; border-left: 4px solid #28a745;">${escapedCV}</pre>
+                <button class="btn btn-success mt-2" onclick="copyOptimizedCV(\`${safeCV}\`)">
+                    <i class="fas fa-copy me-2"></i>Skopiuj nowe CV
+                </button>
             </div>`;
         }
 
@@ -645,5 +657,14 @@ function verifyPayment(paymentIntentId) {
     .catch(error => {
         console.error('Payment verification error:', error);
         showError('Błąd podczas weryfikacji płatności');
+    });
+}
+// Copy optimized CV to clipboard
+function copyOptimizedCV(text) {
+    navigator.clipboard.writeText(text).then(() => {
+        showSuccess('Zoptymalizowane CV skopiowane do schowka!');
+    }).catch(err => {
+        console.error('Failed to copy text: ', err);
+        showError('Nie udało się skopiować zoptymalizowanego CV.');
     });
 }
