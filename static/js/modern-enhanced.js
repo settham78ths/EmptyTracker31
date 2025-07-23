@@ -1,5 +1,159 @@
 // ULTRA-MODERN CV OPTIMIZER PRO - ENHANCED JAVASCRIPT
 
+// Initialize job analysis functionality
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize analyze job button if it exists
+    const analyzeJobBtn = document.getElementById('analyzeJobBtn');
+    if (analyzeJobBtn) {
+        analyzeJobBtn.addEventListener('click', analyzeJobPosting);
+    }
+    
+    // Initialize other UI elements
+    initializeModernUI();
+});
+
+async function analyzeJobPosting() {
+    const jobDescription = document.getElementById('job_description')?.value;
+    const jobUrl = document.getElementById('job_url')?.value;
+    
+    if (!jobDescription && !jobUrl) {
+        showNotification('Podaj opis stanowiska lub URL oferty pracy', 'warning');
+        return;
+    }
+    
+    const analyzeJobBtn = document.getElementById('analyzeJobBtn');
+    const originalText = analyzeJobBtn.textContent;
+    
+    try {
+        analyzeJobBtn.textContent = 'Analizuję...';
+        analyzeJobBtn.disabled = true;
+        
+        const response = await fetch('/analyze-job-posting', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                job_description: jobDescription,
+                job_url: jobUrl,
+                language: 'pl'
+            })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            displayJobAnalysis(result.analysis);
+            showNotification('Analiza stanowiska zakończona!', 'success');
+        } else {
+            showNotification(result.message || 'Błąd podczas analizy stanowiska', 'error');
+        }
+        
+    } catch (error) {
+        console.error('Error analyzing job posting:', error);
+        showNotification('Wystąpił błąd podczas analizy', 'error');
+    } finally {
+        analyzeJobBtn.textContent = originalText;
+        analyzeJobBtn.disabled = false;
+    }
+}
+
+function displayJobAnalysis(analysis) {
+    const analysisContainer = document.getElementById('jobAnalysisResult');
+    if (!analysisContainer) return;
+    
+    let html = '<div class="job-analysis-results">';
+    
+    if (analysis.job_title) {
+        html += `<h4>Stanowisko: ${analysis.job_title}</h4>`;
+    }
+    
+    if (analysis.key_requirements) {
+        html += '<h5>Kluczowe wymagania:</h5><ul>';
+        analysis.key_requirements.forEach(req => {
+            html += `<li>${req}</li>`;
+        });
+        html += '</ul>';
+    }
+    
+    if (analysis.industry_keywords) {
+        html += '<h5>Słowa kluczowe branżowe:</h5>';
+        html += `<div class="keywords-tags">`;
+        analysis.industry_keywords.forEach(keyword => {
+            html += `<span class="keyword-tag">${keyword}</span>`;
+        });
+        html += '</div>';
+    }
+    
+    html += '</div>';
+    analysisContainer.innerHTML = html;
+    analysisContainer.style.display = 'block';
+}
+
+function initializeModernUI() {
+    // Initialize tooltips
+    const tooltips = document.querySelectorAll('[data-tooltip]');
+    tooltips.forEach(element => {
+        element.addEventListener('mouseenter', showTooltip);
+        element.addEventListener('mouseleave', hideTooltip);
+    });
+    
+    // Initialize smooth scrolling
+    const smoothScrollLinks = document.querySelectorAll('a[href^="#"]');
+    smoothScrollLinks.forEach(link => {
+        link.addEventListener('click', smoothScrollTo);
+    });
+}
+
+function showTooltip(event) {
+    const tooltip = document.createElement('div');
+    tooltip.className = 'tooltip-popup';
+    tooltip.textContent = event.target.dataset.tooltip;
+    document.body.appendChild(tooltip);
+    
+    const rect = event.target.getBoundingClientRect();
+    tooltip.style.left = rect.left + 'px';
+    tooltip.style.top = (rect.top - tooltip.offsetHeight - 10) + 'px';
+}
+
+function hideTooltip() {
+    const tooltip = document.querySelector('.tooltip-popup');
+    if (tooltip) {
+        tooltip.remove();
+    }
+}
+
+function smoothScrollTo(event) {
+    event.preventDefault();
+    const targetId = event.target.getAttribute('href').substring(1);
+    const targetElement = document.getElementById(targetId);
+    
+    if (targetElement) {
+        targetElement.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+        });
+    }
+}
+
+function showNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.innerHTML = `
+        <span>${message}</span>
+        <button onclick="this.parentElement.remove()" class="notification-close">&times;</button>
+    `;
+    
+    document.body.appendChild(notification);
+    
+    // Auto remove after 5 seconds
+    setTimeout(() => {
+        if (notification.parentElement) {
+            notification.remove();
+        }
+    }, 5000);
+}
+
 class CVOptimizerPro {
     constructor() {
         this.cvText = '';

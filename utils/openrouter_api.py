@@ -430,22 +430,92 @@ def optimize_cv_for_specific_position(cv_text, target_position, job_description,
             logger.warning(f"Nie udało się przeanalizować opisu stanowiska: {e}")
 
     prompt = f"""
-    ZADANIE EKSPERCKIE: Przeprowadź zaawansowaną analizę CV i stwórz precyzyjną optymalizację pod konkretne polskie stanowisko pracy.
+    ZAAWANSOWANA OPTYMALIZACJA CV - METODOLOGIA EXPERT-LEVEL:
 
-    ⚠️ ABSOLUTNE ZASADY BEZPIECZEŃSTWA:
-    1. ❌ ZAKAZ WYMYŚLANIA: Używaj WYŁĄCZNIE faktów z oryginalnego CV
-    2. ❌ ZAKAZ DODAWANIA: Nie twórz nowych firm, dat, projektów, osiągnięć
-    3. ✅ INTELIGENTNE PRZEPISYWANIE: Przemyślnie sformułuj istniejące doświadczenia
-    4. ✅ KONTEKSTOWE DOPASOWANIE: Podkreśl aspekty każdego stanowiska, które są relevant dla celu
-    5. ✅ POLSKI RYNEK PRACY: Dostosuj terminologię do polskich standardów HR
-    6. ✅ UNIKALNE OPISY: Jeśli w CV są podobne stanowiska (np. "Kurier" w różnych firmach), stwórz RÓŻNE opisy dla każdego z nich
+    MISJA: Stwórz CV które idealnie pozycjonuje kandydata na stanowisko {target_position}, używając wyłącznie autentycznych danych i inteligentnego reframingu.
 
+    ANALIZA KONTEKSTU:
     🎯 STANOWISKO DOCELOWE: {target_position}
     🏢 FIRMA DOCELOWA: {company_name}
-    📋 OPIS STANOWISKA:
+    📋 SZCZEGÓŁOWY OPIS STANOWISKA:
     {job_description}
 
-    {"📊 ANALIZA STANOWISKA AI:" + str(job_analysis) if job_analysis else ""}
+    {"🤖 INTELIGENTNA ANALIZA STANOWISKA:" + str(job_analysis) if job_analysis else ""}
+
+    METODOLOGIA EXPERT CV OPTIMIZATION:
+
+    FAZA 1 - DEEP POSITION ANALYSIS:
+    Przeanalizuj każdy aspekt docelowego stanowiska:
+    - Core responsibilities i daily tasks
+    - Required vs preferred qualifications
+    - Technical skills hierarchy (must-have, nice-to-have)
+    - Soft skills i behavioral competencies
+    - Industry context i market positioning
+    - Career progression paths w tej roli
+    - Company culture fit indicators
+    - Compensation level indicators (junior/mid/senior)
+
+    FAZA 2 - INTELLIGENT CV ARCHAEOLOGY:
+    Dla każdego elementu w oryginalnym CV przeprowadź:
+    - Skills mining: wyciągnij ukryte umiejętności z opisów pracy
+    - Experience recontextualization: znajdź nowe perspektywy na stare role
+    - Transferable skills identification: zmapuj cross-industry applications
+    - Achievement potential analysis: jak może opisywać swoje successes
+    - Growth trajectory mapping: jak jego kariera prowadzi do target role
+
+    FAZA 3 - STRATEGIC REPOSITIONING:
+    
+    A) MASTER NARRATIVE CREATION:
+    Stwórz spójną historię kariery która:
+    - Pokazuje logiczną progresję ku target position
+    - Pozycjonuje każde poprzednie stanowisko jako stepping stone
+    - Buduje credibility i expertise w relevant areas
+    - Adresuje potential concerns lub gaps
+
+    B) PRECISION EXPERIENCE REFRAMING:
+    Dla każdego stanowiska w CV:
+    ✅ ZACHOWAJ: Wszystkie fakty (firma, daty, oficjalny tytuł)
+    ✅ TRANSFORM: Opisy obowiązków używając target position language
+    ✅ HIGHLIGHT: Aspekty pracy które build toward target role
+    ✅ CONNECT: Pokazuj bridges między różnymi experiences
+    ✅ DIFFERENTIATE: Każde podobne stanowisko musi mieć unique value proposition
+
+    C) ADVANCED DIFFERENTIATION STRATEGY:
+    Jeśli CV zawiera podobne stanowiska (np. multiple "Kurier" roles):
+
+    FRAMEWORK RÓŻNICOWANIA:
+    1. SCOPE DIFFERENTIATION: (local vs regional vs international)
+    2. CUSTOMER DIFFERENTIATION: (B2C vs B2B vs B2G) 
+    3. COMPLEXITY DIFFERENTIATION: (standard vs express vs specialized)
+    4. RESPONSIBILITY DIFFERENTIATION: (operational vs coordinational vs analytical)
+    5. TECHNOLOGY DIFFERENTIATION: (different systems, platforms, tools)
+
+    PRZYKŁAD MASTER-LEVEL DIFFERENTIATION:
+
+    TARGET: "Specjalista ds. Logistyki w Korporacji"
+
+    POZYCJA 1: "Kurier - DHL Express International" (2023-obecnie)
+    ✅ STRATEGIC REFRAME: "Koordynowałem kompleksowe procesy logistyki międzynarodowej, zarządzałem compliance z procedurami celnymi i regulacjami importowymi, optymalizowałem cross-border delivery workflows oraz współpracowałem z international supply chain teams w zakresie time-critical shipments"
+
+    POZYCJA 2: "Kurier - DPD Business Solutions" (2022-2023)  
+    ✅ STRATEGIC REFRAME: "Zarządzałem portfelem klientów biznesowych, analizowałem patterns logistyczne dla optimization opportunities, implementowałem customer-specific delivery solutions oraz budowałem long-term partnerships z corporate accounts przez superior service delivery"
+
+    POZYCJA 3: "Kurier - UPS Supply Chain" (2021-2022)
+    ✅ STRATEGIC REFRAME: "Obsługiwałem integrated supply chain operations, koordynowałem multi-modal transportation solutions, zarządzałem inventory tracking systems oraz współpracowałem z warehouse management teams w zakresie end-to-end logistics coordination"
+
+    ADVANCED POSITIONING TECHNIQUES:
+    - Każda rola pokazuje EVOLVING sophistication
+    - Progressive terminology: operational → tactical → strategic
+    - Industry-specific language dla każdej company
+    - Skill progression narrative across positions
+    - Value creation story w każdej roli
+
+    ABSOLUTNE SECURITY PROTOCOLS:
+    ❌ ZERO FABRICATION: Nie dodawaj firm, dat, projektów, metrics, achievements
+    ❌ ZERO INVENTION: Nie twórz skills, certifications, experiences
+    ✅ INTELLIGENT RECONTEXTUALIZATION: Przekształcaj existing info
+    ✅ STRATEGIC POSITIONING: Buduj compelling candidate narrative
+    ✅ AUTHENTIC ENHANCEMENT: Maksymalizuj value z existing data
 
     STRATEGIA OPTYMALIZACJI - KROK PO KROKU:
 
@@ -677,112 +747,133 @@ def optimize_cv(cv_text, job_description, language='pl', is_premium=False, payme
     Premium users get extended token limits for more detailed CV generation
     """
     prompt = f"""
-    ZADANIE: Automatycznie rozpoznaj branżę/sektor na podstawie CV, a następnie zoptymalizuj je pod kątem tej branży i stanowiska, używając WYŁĄCZNIE prawdziwych informacji z oryginalnego CV.
+    ZADANIE EKSPERTA CV: Przeprowadź inteligentną analizę i optymalizację CV pod konkretne stanowisko pracy, używając WYŁĄCZNIE autentycznych danych z oryginalnego CV.
 
-    ABSOLUTNE ZASADY - PRZECZYTAJ UWAŻNIE:
-    1. ❌ ZAKAZ WYMYŚLANIA: NIE dodawaj żadnych nowych informacji, firm, stanowisk, dat, liczb, procent, osiągnięć
-    2. ❌ ZAKAZ DODAWANIA: NIE twórz nowych umiejętności, certyfikatów, projektów czy doświadczeń
-    3. ✅ DOZWOLONE: Tylko przepisanie istniejących informacji z CV w bardziej profesjonalny sposób
-    4. ✅ DOZWOLONE: Uporządkowanie i lepsze sformułowanie tego, co już jest w CV
-    5. ✅ DOSTOSOWANIE BRANŻOWE: Użyj terminologii i stylu właściwego dla rozpoznanej branży
+    METODOLOGIA SMART CV OPTIMIZATION:
 
-    KROK 1 - ROZPOZNANIE BRANŻY:
-    Na podstawie doświadczenia zawodowego, umiejętności i wykształcenia określ główną branżę/sektor:
-    - IT/Technologie (programowanie, systemy, data science)
-    - Finanse/Bankowość (księgowość, analizy finansowe, banking)
-    - Medycyna/Zdrowie (opieka zdrowotna, farmacja, medycyna)
-    - Edukacja (nauczanie, szkolenia, rozwój)
-    - Marketing/Sprzedaż (digital marketing, sprzedaż, reklama)
-    - Logistyka/Transport (łańcuch dostaw, kurierzy, magazyny)
-    - Inżynieria/Produkcja (mechanical, electrical, civil engineering)
-    - HR/Zarządzanie (kadry, zarządzanie projektami)
-    - Inne (określ konkretnie)
+    KROK 1 - GŁĘBOKA ANALIZA STANOWISKA:
+    Przeanalizuj opis stanowiska i wyciągnij:
+    - Kluczowe wymagania (hard skills, soft skills, doświadczenie)
+    - Obowiązki i odpowiedzialności
+    - Pożądane kwalifikacje i certyfikaty
+    - Słowa kluczowe branżowe i terminologia
+    - Profil idealnego kandydata
+    - Hierarchia ważności wymagań (must-have vs nice-to-have)
 
-    INSTRUKCJE SZCZEGÓŁOWE Z KONTEKSTEM BRANŻOWYM:
+    KROK 2 - INTELIGENTNE MAPOWANIE CV:
+    Dla każdego elementu z oryginalnego CV:
+    - Zidentyfikuj jak można go przeformułować pod kątem wymagań stanowiska
+    - Znajdź ukryte połączenia między doświadczeniem a wymaganiami
+    - Określ które umiejętności transferowalne można podkreślić
+    - Wykryj potencjał do repositioningu dotychczasowych ról
+    - Przeanalizuj jak różne stanowiska mogą się uzupełniać w narratiwie
 
-    1. DANE OSOBOWE:
-       - Przepisz dokładnie imię, nazwisko i kontakt z oryginalnego CV
-       - NIE dodawaj nowych informacji kontaktowych
-
-    2. PODSUMOWANIE ZAWODOWE:
-       - Napisz krótkie podsumowanie bazując TYLKO na doświadczeniu z CV
-       - Użyj tylko tych umiejętności, które są faktycznie wymienione w CV
-       - NIE wymyślaj branży ani specjalizacji, których nie ma w oryginale
-
-    3. DOŚWIADCZENIE ZAWODOWE:
-       - Przepisz każde stanowisko DOKŁADNIE jak w oryginale (firma, stanowisko, daty)
-       - Dla każdego miejsca pracy napisz 3-4 punkty opisujące obowiązki
-       - Bazuj punkty TYLKO na informacjach z oryginalnego CV
-       - Użyj profesjonalnych czasowników (planowałem, koordynowałem, obsługiwałem)
-       - NIE dodawaj liczb, procent ani wymyślonych osiągnięć
-       - KLUCZOWE: Jeśli są podobne stanowiska (np. "Kurier" w różnych firmach), stwórz RÓŻNE opisy dla każdego z nich:
-         * Skupiaj się na różnych aspektach tej samej pracy
-         * Użyj specyfiki każdej firmy (DHL = międzynarodowe, DPD = lokalne, UPS = biznesowe)
-         * Zastosuj różne terminy branżowe dla każdego stanowiska
-         * Podkreśl inne umiejętności w każdym opisie
-
-    4. UMIEJĘTNOŚCI:
-       - Przepisz TYLKO te umiejętności, które są wymienione w oryginalnym CV
-       - Pogrupuj je w kategorie (np. Techniczne, Komunikacyjne, Zawodowe)
-       - NIE dodawaj nowych umiejętności
-
-    5. WYKSZTAŁCENIE:
-       - Przepisz dokładnie informacje o wykształceniu z CV
-       - NIE dodawaj kursów czy certyfikatów, których nie ma w oryginale
-
-    6. DOPASOWANIE DO STANOWISKA:
-       - Wyeksponuj te elementy z CV, które pasują do opisu stanowiska
-       - Ale NIE dodawaj nowych elementów - tylko lepiej opisuj istniejące
-
-    PRZYKŁAD DOBREGO PODEJŚCIA:
-    Oryginał: "Dostarczanie paczek"
-    Zoptymalizowane: "Realizowałem terminowe dostawy paczek do klientów"
-
-    PRZYKŁAD ZŁEGO PODEJŚCIA (NIE RÓB TEGO):
-    ❌ "Zwiększyłem efektywność dostaw o 25%" (gdy nie ma takiej informacji w CV)
-    ❌ "Zarządzałem zespołem 5 kurierów" (gdy nie ma takiej informacji w CV)
-
-    PRZYKŁADY RÓŻNICOWANIA PODOBNYCH STANOWISK:
+    KROK 3 - STRATEGICZNA REKONSTRUKCJA:
     
-    Jeśli w CV są 3 stanowiska "Kurier" w różnych firmach:
-    
-    STANOWISKO 1: "Kurier - DHL" (2022-2023)
-    ✅ Opis 1: "Wykonywałem ekspresowe dostawy międzynarodowe, obsługiwałem system śledzenia przesyłek i zapewniałem terminowość dostaw zgodnie z procedurami DHL"
-    
-    STANOWISKO 2: "Kurier - DPD" (2021-2022)  
-    ✅ Opis 2: "Realizowałem dostawy lokalne na terenie miasta, utrzymywałem kontakt z klientami i optymalizowałem trasy dostaw dla maksymalnej efektywności"
-    
-    STANOWISKO 3: "Kurier - UPS" (2020-2021)
-    ✅ Opis 3: "Odpowiadałem za dostawy biznesowe do firm, zarządzałem dokumentacją celną przesyłek zagranicznych i współpracowałem z działem obsługi klienta"
+    A) ROZPOZNANIE BRANŻY I POZIOMU:
+    Na podstawie CV automatycznie określ:
+    - Główną branżę/sektor działalności
+    - Poziom doświadczenia (junior/mid/senior/expert)
+    - Trajektorię rozwoju kariery
+    - Specjalizację lub obszar expertise
 
-    KLUCZOWE ZASADY RÓŻNICOWANIA:
-    1. Użyj różnych aspektów tej samej pracy (międzynarodowe vs lokalne vs biznesowe)
-    2. Podkreśl specyfikę każdej firmy (DHL = ekspresowe, DPD = lokalne, UPS = biznesowe)
-    3. Zastosuj różne terminy branżowe dla każdego stanowiska
-    4. Skupiaj się na innych umiejętnościach w każdym opisie
+    B) INTELIGENTNE PRZEPISYWANIE DOŚWIADCZENIA:
+    Dla każdego stanowiska pracy:
+    - Zachowaj wszystkie fakty (firma, daty, tytuł stanowiska)
+    - Przepisz obowiązki używając terminologii docelowej branży
+    - Podkreśl aspekty pracy relevant dla target position
+    - Użyj action verbs i professional language
+    - Stwórz połączenia między różnymi rolami a docelowym stanowiskiem
+    - KLUCZOWE: Dla podobnych stanowisk stwórz UNIKALNE opisy:
+      * Użyj różnych aspektów tej samej pracy
+      * Podkreśl specyfikę każdej firmy/branży
+      * Zastosuj różne słowa kluczowe dla każdej pozycji
+      * Skoncentruj się na innych skill sets w każdym opisie
 
-    ORYGINALNE CV:
+    C) PROFESJONALNE POZYCJONOWANIE:
+    - Stwórz compelling professional summary bazując na faktach z CV
+    - Zorganizuj umiejętności według ważności dla target role
+    - Dostosuj język i styl do poziomu stanowiska (entry/mid/senior)
+    - Zastosuj branżową terminologię i standardy
+
+    ABSOLUTNE GUARDRAILS:
+    ❌ ZERO FABRICATION: Nie dodawaj firm, dat, projektów, liczb, osiągnięć
+    ❌ ZERO INVENTION: Nie twórz nowych umiejętności, certyfikatów, doświadczeń
+    ✅ INTELLIGENT REFRAMING: Przemyślnie przepisuj istniejące informacje
+    ✅ STRATEGIC POSITIONING: Pozycjonuj kandydata dla target role
+    ✅ AUTHENTIC ENHANCEMENT: Wzmacniaj to co już jest w CV
+
+    PRZYKŁADY INTELIGENTNEGO REFRAMINGU:
+
+    TARGET POSITION: "Specjalista ds. Logistyki"
+    
+    Oryginał: "Kurier - przewożenie paczek"
+    ✅ Smart Reframe: "Koordynowałem procesy dystrybucji przesyłek, optymalizowałem trasy dostaw i zapewniałem terminową realizację zleceń logistycznych zgodnie z procedurami operacyjnymi"
+
+    TARGET POSITION: "Junior Developer"
+    
+    Oryginał: "Kasjer w sklepie"
+    ✅ Smart Reframe: "Obsługiwałem system POS, analizowałem dane sprzedażowe, rozwiązywałem problemy techniczne i zapewniałem sprawne funkcjonowanie systemów informatycznych"
+
+    PRZYKŁAD RÓŻNICOWANIA PODOBNYCH STANOWISK:
+
+    SCENARIUSZ: 3 stanowiska "Kurier" w CV, target position: "Koordinator Logistyki"
+
+    POZYCJA 1: "Kurier - DHL Express" (2023-obecnie)
+    ✅ Strategic Description: "Zarządzałem ekspresowymi przesyłkami międzynarodowymi, koordynowałem z centrum dystrybucji, monitorowałem status deliveries w systemach trackingowych i zapewniałem compliance z procedurami międzynarodowymi"
+
+    POZYCJA 2: "Kurier - DPD Polska" (2022-2023)
+    ✅ Strategic Description: "Optymalizowałem lokalne trasy dostaw, zarządzałem relationshipami z klientami B2C, analizowałem efektywność operational processes i implementowałem solutions dla improved customer satisfaction"
+
+    POZYCJA 3: "Kurier - UPS Supply Chain" (2021-2022)
+    ✅ Strategic Description: "Obsługiwałem corporate accounts, koordynowałem B2B deliveries, zarządzałem dokumentacją import/export i współpracowałem z supply chain teams w zakresie logistics coordination"
+
+    STRATEGIA UNIKALNOŚCI:
+    - Każda pozycja podkreśla INNE aspekty logistics experience
+    - Użycie różnej terminologii branżowej (international, local, B2B)
+    - Progresja umiejętności od operational do strategic level
+    - Różne focus areas: international compliance, customer relations, corporate partnerships
+
+    ORYGINALNY TEKST CV:
     {cv_text}
 
-    STANOWISKO, DO KTÓREGO OPTYMALIZUJEMY:
+    OPIS DOCELOWEGO STANOWISKA:
     {job_description}
 
-    WYGENERUJ: Profesjonalne CV używając WYŁĄCZNIE informacji z oryginalnego CV, bez dodawania żadnych wymyślonych elementów.
+    WYKONAJ SMART OPTIMIZATION według powyższej metodologii i zwróć rezultat w JSON:
 
-    ODPOWIEDŹ W FORMACIE JSON:
     {{
-        "detected_industry": "rozpoznana branża/sektor",
-        "industry_keywords": ["słowo kluczowe 1", "słowo kluczowe 2", "słowo kluczowe 3"],
-        "optimized_cv": "Kompletne zoptymalizowane CV z branżowym dostosowaniem",
-        "key_improvements": [
-            "Dostosowano terminologię do branży [nazwa branży]",
-            "Podkreślono kluczowe umiejętności [konkretne umiejętności]",
-            "Wzmocniono sekcję [nazwa sekcji]"
+        "position_analysis": {{
+            "target_role": "tytuł docelowego stanowiska",
+            "industry_sector": "rozpoznana branża/sektor",
+            "experience_level": "poziom doświadczenia kandydata",
+            "key_requirements": ["requirement1", "requirement2", "requirement3"],
+            "transferable_skills_identified": ["skill1", "skill2", "skill3"],
+            "positioning_strategy": "jak pozycjonować kandydata"
+        }},
+        "cv_optimization": {{
+            "detected_industry": "główna branża CV",
+            "industry_keywords": ["kluczowe słowo1", "kluczowe słowo2", "kluczowe słowo3"],
+            "optimized_cv": "KOMPLETNIE ZOPTYMALIZOWANE CV - gotowe do wysłania",
+            "unique_positioning": "unikalna wartość kandydata dla tego stanowiska"
+        }},
+        "improvement_metrics": {{
+            "ats_compatibility_score": "[0-100]",
+            "job_match_score": "[0-100]",
+            "keyword_optimization": "poziom optymalizacji słów kluczowych",
+            "differentiation_strength": "siła różnicowania od konkurencji"
+        }},
+        "strategic_enhancements": [
+            "kluczowa poprawa 1 z uzasadnieniem",
+            "kluczowa poprawa 2 z uzasadnieniem", 
+            "kluczowa poprawa 3 z uzasadnieniem"
         ],
-        "ats_compatibility_score": "[0-100]",
-        "job_match_score": "[0-100]",
-        "positioning_strategy": "Jak kandydat jest pozycjonowany w branży",
-        "summary": "Zwięzłe podsumowanie wprowadzonych ulepszeń"
+        "success_prediction": {{
+            "interview_probability": "[0-100]% szansy na zaproszenie",
+            "competitive_advantage": "główne przewagi kandydata",
+            "areas_of_strength": ["mocna strona1", "mocna strona2"],
+            "positioning_summary": "zwięzłe podsumowanie pozycji kandydata"
+        }}
     }}"""
 
     # Rozszerzony limit tokenów dla płacących użytkowników
