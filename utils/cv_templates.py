@@ -496,3 +496,139 @@ def generate_cv_with_template(cv_data, template_style="modern_blue"):
     else:
         # Default to modern blue
         return generator.generate_modern_blue_cv(cv_data)
+import io
+from reportlab.lib import colors
+from reportlab.lib.pagesizes import letter, A4
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.lib.units import inch
+
+def generate_cv_with_template(cv_data, template_style='modern_blue'):
+    """
+    Generate CV PDF with selected template style
+    """
+    buffer = io.BytesIO()
+    doc = SimpleDocTemplate(buffer, pagesize=A4)
+    styles = getSampleStyleSheet()
+    story = []
+
+    # Template-specific styling
+    if template_style == 'modern_blue':
+        primary_color = colors.HexColor('#3498db')
+        secondary_color = colors.HexColor('#2c3e50')
+    elif template_style == 'creative':
+        primary_color = colors.HexColor('#e74c3c')
+        secondary_color = colors.HexColor('#f39c12')
+    elif template_style == 'executive':
+        primary_color = colors.HexColor('#34495e')
+        secondary_color = colors.HexColor('#2c3e50')
+    else:  # minimalist
+        primary_color = colors.HexColor('#2c3e50')
+        secondary_color = colors.HexColor('#95a5a6')
+
+    # Custom styles
+    title_style = ParagraphStyle(
+        'CustomTitle',
+        parent=styles['Heading1'],
+        fontSize=24,
+        textColor=primary_color,
+        spaceAfter=30,
+        alignment=1  # Center
+    )
+
+    subtitle_style = ParagraphStyle(
+        'CustomSubtitle',
+        parent=styles['Heading2'],
+        fontSize=16,
+        textColor=secondary_color,
+        spaceAfter=20
+    )
+
+    normal_style = ParagraphStyle(
+        'CustomNormal',
+        parent=styles['Normal'],
+        fontSize=11,
+        spaceAfter=12
+    )
+
+    # Header
+    name = f"{cv_data.get('firstName', '')} {cv_data.get('lastName', '')}".strip()
+    story.append(Paragraph(name, title_style))
+
+    job_title = cv_data.get('jobTitle', '')
+    if job_title:
+        story.append(Paragraph(job_title, styles['Heading3']))
+
+    # Contact info
+    contact_info = []
+    if cv_data.get('email'):
+        contact_info.append(cv_data['email'])
+    if cv_data.get('phone'):
+        contact_info.append(cv_data['phone'])
+    if cv_data.get('city'):
+        contact_info.append(cv_data['city'])
+
+    if contact_info:
+        story.append(Paragraph(' | '.join(contact_info), normal_style))
+
+    story.append(Spacer(1, 20))
+
+    # Summary
+    if cv_data.get('summary'):
+        story.append(Paragraph("O mnie", subtitle_style))
+        story.append(Paragraph(cv_data['summary'], normal_style))
+        story.append(Spacer(1, 15))
+
+    # Experience
+    experiences = cv_data.get('experiences', [])
+    if experiences and any(exp.get('title') or exp.get('company') for exp in experiences):
+        story.append(Paragraph("Doświadczenie zawodowe", subtitle_style))
+        for exp in experiences:
+            if exp.get('title') or exp.get('company'):
+                # Title and company
+                exp_header = f"<b>{exp.get('title', 'Stanowisko')}</b> - {exp.get('company', 'Firma')}"
+                story.append(Paragraph(exp_header, normal_style))
+
+                # Dates
+                start_date = exp.get('startDate', '')
+                end_date = exp.get('endDate', 'obecnie')
+                if start_date:
+                    date_range = f"{start_date} - {end_date}"
+                    story.append(Paragraph(date_range, normal_style))
+
+                # Description
+                if exp.get('description'):
+                    story.append(Paragraph(exp['description'], normal_style))
+
+                story.append(Spacer(1, 10))
+
+    # Education
+    education = cv_data.get('education', [])
+    if education and any(edu.get('degree') or edu.get('school') for edu in education):
+        story.append(Paragraph("Wykształcenie", subtitle_style))
+        for edu in education:
+            if edu.get('degree') or edu.get('school'):
+                # Degree and school
+                edu_header = f"<b>{edu.get('degree', 'Kierunek')}</b> - {edu.get('school', 'Uczelnia')}"
+                story.append(Paragraph(edu_header, normal_style))
+
+                # Years
+                start_year = edu.get('startYear', '')
+                end_year = edu.get('endYear', '')
+                if start_year or end_year:
+                    year_range = f"{start_year} - {end_year}"
+                    story.append(Paragraph(year_range, normal_style))
+
+                story.append(Spacer(1, 10))
+
+    # Skills
+    skills = cv_data.get('skills', '')
+    if skills:
+        story.append(Paragraph("Umiejętności", subtitle_style))
+        skills_list = [skill.strip() for skill in skills.split(',') if skill.strip()]
+        skills_text = ' • '.join(skills_list)
+        story.append(Paragraph(skills_text, normal_style))
+
+    doc.build(story)
+    buffer.seek(0)
+    return buffer

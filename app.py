@@ -799,9 +799,12 @@ def generate_ai_cv():
         }
         
         # Generate PDF with selected template
-        from utils.cv_templates import generate_cv_with_template
-        
-        pdf_buffer = generate_cv_with_template(complete_cv_data, basic_info['template_style'])
+        try:
+            from utils.cv_templates import generate_cv_with_template
+            pdf_buffer = generate_cv_with_template(complete_cv_data, basic_info['template_style'])
+        except ImportError:
+            # Fallback to basic PDF generation
+            pdf_buffer = generate_cv_pdf_file(complete_cv_data)
         
         # Encode as base64
         pdf_base64 = base64.b64encode(pdf_buffer.getvalue()).decode()
