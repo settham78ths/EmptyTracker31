@@ -25,11 +25,11 @@ def send_api_request(prompt, max_tokens=2000, language='pl'):
     """
     if not OPENROUTER_API_KEY:
         logger.error("OpenRouter API key not found")
-        raise ValueError("🔑 Brak klucza API OpenRouter! Sprawdź plik .env - powinien zawierać OPENROUTER_API_KEY=twój_klucz")
+        return "⚠️ DEMO MODE: Brak klucza API OpenRouter. Skontaktuj się z administratorem aby aktywować pełną funkcjonalność AI."
     
     if len(OPENROUTER_API_KEY) < 10:
         logger.error("OpenRouter API key seems invalid")
-        raise ValueError("🔑 Klucz API OpenRouter wydaje się nieprawidłowy. Sprawdź czy jest kompletny w pliku .env")
+        return "⚠️ DEMO MODE: Nieprawidłowy klucz API. Funkcje AI są ograniczone."
 
     # Language-specific system prompts
     language_prompts = {

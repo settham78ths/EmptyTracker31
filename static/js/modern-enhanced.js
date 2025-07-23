@@ -219,7 +219,12 @@ class CVOptimizerPro {
             }
         } catch (error) {
             console.error('Process error:', error);
-            this.showNotification('Błąd połączenia. Spróbuj ponownie.', 'error');
+            this.showNotification('Wystąpił błąd połączenia. Sprawdź połączenie internetowe i spróbuj ponownie.', 'error');
+            
+            // Pokaż więcej informacji w trybie debug
+            if (error.message) {
+                console.log('Szczegóły błędu:', error.message);
+            }
         } finally {
             this.isProcessing = false;
             this.hideProcessingState();

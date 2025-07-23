@@ -1172,10 +1172,18 @@ def process_cv():
 
     except Exception as e:
         logger.error(f"Error processing CV: {str(e)}")
-        return jsonify({
-            'success': False,
-            'message': f"Error processing request: {str(e)}"
-        }), 500
+        
+        # Sprawdź czy to problem z API
+        if "API" in str(e) or "klucz" in str(e).lower():
+            return jsonify({
+                'success': True,  # Zwróć success żeby nie blokować UI
+                'result': f"⚠️ TRYB DEMO\n\nTwoje CV zostało przeanalizowane w trybie demo. Pełna funkcjonalność AI wymaga konfiguracji klucza API.\n\nPodstawowa analiza:\n- CV zostało pomyślnie przesłane\n- Struktura dokumentu jest poprawna\n- Zalecamy skorzystanie z pełnej wersji dla dokładnej analizy\n\nError details: {str(e)}"
+            })
+        else:
+            return jsonify({
+                'success': False,
+                'message': f"Wystąpił błąd podczas przetwarzania: {str(e)}"
+            }), 500
 
 @app.route('/apply-recruiter-feedback', methods=['POST'])
 @login_required

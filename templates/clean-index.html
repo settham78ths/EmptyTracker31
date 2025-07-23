@@ -635,7 +635,13 @@ Przykład:
                 .then(data => {
                     if (data.success) {
                         displayResult(data.result);
-                        showSuccess('✅ Analiza zakończona pomyślnie!');
+                        
+                        // Sprawdź czy to tryb demo
+                        if (data.result && data.result.includes('TRYB DEMO')) {
+                            showError('⚠️ Aplikacja działa w trybie demo. Skontaktuj się z administratorem aby aktywować pełną funkcjonalność.');
+                        } else {
+                            showSuccess('✅ Analiza zakończona pomyślnie!');
+                        }
                     } else if (data.payment_required) {
                         showError('Ta funkcja wymaga płatności. Zostaniesz przekierowany...');
                         setTimeout(() => window.location.href = '/payment-options', 2000);
