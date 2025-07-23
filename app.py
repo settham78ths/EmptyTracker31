@@ -1,4 +1,5 @@
 import os
+import sys
 import logging
 from tempfile import mkdtemp
 from datetime import datetime, timedelta
@@ -1304,26 +1305,44 @@ def analyze_job_posting():
         }), 500
 
 if __name__ == '__main__':
-    with app.app_context():
-        db.create_all()
+    try:
+        print("🚀 Uruchamianie CV Optimizer Pro...")
+        print(f"📍 Python version: {sys.version}")
+        print(f"📍 Flask app: {app}")
+        
+        with app.app_context():
+            print("🔄 Tworzenie tabel bazy danych...")
+            db.create_all()
+            print("✅ Tabele bazy danych utworzone")
 
-        # Create developer account for management
-        dev_user = User.query.filter_by(username='developer').first()
-        if not dev_user:
-            dev_user = User(
-                username='developer',
-                email='dev@cvoptimizer.pro',
-                first_name='Developer',
-                last_name='Admin'
-            )
-            dev_user.set_password('DevAdmin2024!')
-            db.session.add(dev_user)
-            db.session.commit()
-            print("✅ Developer account created successfully!")
-            print("🔑 Username: developer")
-            print("🔑 Password: DevAdmin2024!")
-        else:
-            print("✅ Developer account already exists")
+            # Create developer account for management
+            print("🔄 Sprawdzanie konta developer...")
+            dev_user = User.query.filter_by(username='developer').first()
+            if not dev_user:
+                dev_user = User(
+                    username='developer',
+                    email='dev@cvoptimizer.pro',
+                    first_name='Developer',
+                    last_name='Admin'
+                )
+                dev_user.set_password('DevAdmin2024!')
+                db.session.add(dev_user)
+                db.session.commit()
+                print("✅ Developer account created successfully!")
+                print("🔑 Username: developer")
+                print("🔑 Password: DevAdmin2024!")
+            else:
+                print("✅ Developer account already exists")
 
-    port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port, debug=True)
+        port = int(os.environ.get('PORT', 5000))
+        print(f"🌐 Uruchamianie serwera na porcie {port}...")
+        print(f"🔗 Aplikacja będzie dostępna na: http://0.0.0.0:{port}")
+        
+        app.run(host='0.0.0.0', port=port, debug=True)
+        
+    except Exception as e:
+        print(f"❌ Błąd podczas uruchamiania aplikacji:")
+        print(f"   {type(e).__name__}: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        sys.exit(1)
