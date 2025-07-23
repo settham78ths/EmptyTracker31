@@ -18,102 +18,32 @@ from reportlab.lib.units import inch
 import io
 import base64
 from datetime import datetime
-# Import models with error handling
-try:
-    from models import db, User, CVUpload, AnalysisResult
-    logger.info("Database models loaded successfully")
-except ImportError as e:
-    logger.error(f"Error importing models: {e}")
-    logger.info("Creating basic models inline...")
-    # Create basic models if import fails
-    from flask_sqlalchemy import SQLAlchemy
-    from flask_login import UserMixin
-    from werkzeug.security import generate_password_hash, check_password_hash
-    from datetime import datetime
-    
-    db = SQLAlchemy()
-    
-    class User(UserMixin, db.Model):
-        id = db.Column(db.Integer, primary_key=True)
-        username = db.Column(db.String(80), unique=True, nullable=False)
-        email = db.Column(db.String(120), unique=True, nullable=False)
-        password_hash = db.Column(db.String(128))
-        first_name = db.Column(db.String(50))
-        last_name = db.Column(db.String(50))
-        created_at = db.Column(db.DateTime, default=datetime.utcnow)
-        
-        def set_password(self, password):
-            self.password_hash = generate_password_hash(password)
-            
-        def check_password(self, password):
-            return check_password_hash(self.password_hash, password)
-            
-        def is_premium_active(self):
-            return False  # Basic implementation
-    
-    class CVUpload(db.Model):
-        id = db.Column(db.Integer, primary_key=True)
-        user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-        filename = db.Column(db.String(255), nullable=False)
-        original_text = db.Column(db.Text, nullable=False)
-        uploaded_at = db.Column(db.DateTime, default=datetime.utcnow)
-        job_title = db.Column(db.String(200))
-        job_description = db.Column(db.Text)
-        
-    class AnalysisResult(db.Model):
-        id = db.Column(db.Integer, primary_key=True)
-        cv_upload_id = db.Column(db.Integer, db.ForeignKey('cv_upload.id'), nullable=False)
-        analysis_type = db.Column(db.String(50), nullable=False)
-        result_data = db.Column(db.Text)
-        created_at = db.Column(db.DateTime, default=datetime.utcnow)
+from models import db, User, CVUpload, AnalysisResult
 from forms import LoginForm, RegistrationForm, UserProfileForm, ChangePasswordForm
 from utils.pdf_extraction import extract_text_from_pdf
-# Import utilities with error handling
-try:
-    from utils.openrouter_api import (
-        optimize_cv, generate_recruiter_feedback,
-        generate_cover_letter, analyze_job_url,
-        ats_optimization_check, generate_interview_questions,
-        analyze_cv_strengths, analyze_cv_score,
-        analyze_keywords_match, check_grammar_and_style,
-        optimize_for_position, generate_interview_tips
-    )
-    logger.info("OpenRouter API utilities loaded successfully")
-except ImportError as e:
-    logger.error(f"Error importing OpenRouter utilities: {e}")
-
-try:
-    from utils.rate_limiter import rate_limit
-except ImportError:
-    logger.warning("Rate limiter not available, using dummy decorator")
-    def rate_limit(key):
-        def decorator(f):
-            return f
-        return decorator
-
-try:
-    from utils.security_middleware import security_middleware
-    from utils.cv_validator import cv_validator
-except ImportError as e:
-    logger.warning(f"Some utilities not available: {e}")
-    
-try:
-    from utils.notifications import notification_system
-    from utils.analytics import analytics
-except ImportError:
-    logger.warning("Optional utilities not available")
+from utils.openrouter_api import (
+    optimize_cv, generate_recruiter_feedback,
+    generate_cover_letter, analyze_job_url,
+    ats_optimization_check, generate_interview_questions,
+    analyze_cv_strengths, analyze_cv_score,
+    analyze_keywords_match, check_grammar_and_style,
+    optimize_for_position, generate_interview_tips
+)
+from utils.rate_limiter import rate_limit
+from utils.encryption import encryption
+from utils.security_middleware import security_middleware
+from utils.notifications import notification_system
+from utils.analytics import analytics
+from utils.cv_validator import cv_validator
 
 
 # Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-)
+logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 # Initialize Flask app
 app = Flask(__name__)
-app.secret_key = os.environ.get("SESSION_SECRET", "dev-secret-key-change-in-production")
+app.secret_key = os.environ.get("SESSION_SECRET", "dev-secret-key")
 
 # Enhanced session security
 app.config.update(
@@ -123,23 +53,18 @@ app.config.update(
     PERMANENT_SESSION_LIFETIME=timedelta(hours=24)  # Session timeout
 )
 
-# Database configuration with error handling
-try:
-    database_url = os.environ.get('DATABASE_URL')
-    if not database_url:
-        # Fallback to SQLite for development
-        database_url = 'sqlite:///cv_optimizer.db'
-        logger.info("Using SQLite database for development")
+# Database configuration
+database_url = os.environ.get('DATABASE_URL')
+if not database_url:
+    # Fallback to SQLite for development
+    database_url = 'sqlite:///cv_optimizer.db'
+    logger.warning("Using SQLite database for development")
 
-    # Fix for PostgreSQL URL compatibility
-    if database_url.startswith('postgres://'):
-        database_url = database_url.replace('postgres://', 'postgresql://', 1)
+# Fix for PostgreSQL URL compatibility
+if database_url.startswith('postgres://'):
+    database_url = database_url.replace('postgres://', 'postgresql://', 1)
 
-    app.config['SQLALCHEMY_DATABASE_URI'] = database_url
-    logger.info(f"Database configured: {database_url.split('@')[0]}...")
-except Exception as e:
-    logger.error(f"Database configuration error: {e}")
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///cv_optimizer.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = database_url
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
     'pool_pre_ping': True,
