@@ -23,20 +23,13 @@ def send_api_request(prompt, max_tokens=2000, language='pl'):
     """
     Send a request to the OpenRouter API with language specification and timeout
     """
-    logger.info(f"Sprawdzanie klucza API...")
-    logger.info(f"Klucz API obecny: {'Tak' if OPENROUTER_API_KEY else 'Nie'}")
-    
-    if OPENROUTER_API_KEY:
-        logger.info(f"Długość klucza: {len(OPENROUTER_API_KEY)} znaków")
-        logger.info(f"Klucz zaczyna się od: {OPENROUTER_API_KEY[:10]}...")
-    
     if not OPENROUTER_API_KEY:
         logger.error("OpenRouter API key not found")
-        return "⚠️ DEMO MODE: Brak klucza API OpenRouter. Dodaj klucz OPENROUTER_API_KEY w Secrets."
+        return "⚠️ DEMO MODE: Brak klucza API OpenRouter. Skontaktuj się z administratorem aby aktywować pełną funkcjonalność AI."
     
     if len(OPENROUTER_API_KEY) < 10:
         logger.error("OpenRouter API key seems invalid")
-        return "⚠️ DEMO MODE: Nieprawidłowy klucz API. Sprawdź czy klucz jest kompletny."
+        return "⚠️ DEMO MODE: Nieprawidłowy klucz API. Funkcje AI są ograniczone."
 
     # Language-specific system prompts
     language_prompts = {
@@ -57,10 +50,7 @@ def send_api_request(prompt, max_tokens=2000, language='pl'):
     }
 
     try:
-        logger.info(f"Wysyłam zapytanie do OpenRouter API...")
-        logger.debug(f"URL: {OPENROUTER_BASE_URL}")
-        logger.debug(f"Model: {MODEL}")
-        logger.debug(f"Max tokens: {max_tokens}")
+        logger.debug(f"Sending request to OpenRouter API (max_tokens: {max_tokens})")
         
         # Add timeout to prevent hanging requests
         response = requests.post(
@@ -69,48 +59,33 @@ def send_api_request(prompt, max_tokens=2000, language='pl'):
             json=payload,
             timeout=120  # 2 minutes timeout
         )
-        
-        logger.info(f"Odpowiedź API - Status: {response.status_code}")
-        
-        if response.status_code != 200:
-            logger.error(f"API Error {response.status_code}: {response.text}")
-        
         response.raise_for_status()
 
         result = response.json()
-        logger.info("✅ Otrzymano odpowiedź z OpenRouter API")
+        logger.debug("Received response from OpenRouter API")
 
         if 'choices' in result and len(result['choices']) > 0:
             content = result['choices'][0]['message']['content']
-            logger.info(f"✅ Wygenerowano odpowiedź: {len(content)} znaków")
+            logger.debug(f"Response length: {len(content)} characters")
             return content
         else:
-            logger.error(f"Nieoczekiwany format odpowiedzi: {result}")
             raise ValueError("Unexpected API response format")
 
     except requests.exceptions.Timeout:
-        logger.error("⚠️ OpenRouter API request timed out")
+        logger.error("OpenRouter API request timed out")
         raise Exception("Zapytanie do AI przekroczyło limit czasu. Spróbuj z krótszym tekstem.")
 
     except requests.exceptions.RequestException as e:
-        logger.error(f"❌ API request failed: {str(e)}")
-        logger.error(f"Response content: {getattr(e.response, 'text', 'No response content')}")
-        
-        if hasattr(e.response, 'status_code'):
-            status_code = e.response.status_code
-            if status_code == 401:
-                raise Exception("🔑 Nieprawidłowy klucz API OpenRouter. Sprawdź czy klucz jest poprawny.")
-            elif status_code == 429:
-                raise Exception("Przekroczono limit zapytań do AI. Spróbuj ponownie za chwilę.")
-            elif status_code == 500:
-                raise Exception("Serwer AI jest tymczasowo niedostępny. Spróbuj ponownie za chwilę.")
-            else:
-                raise Exception(f"Błąd API {status_code}: {str(e)}")
+        logger.error(f"API request failed: {str(e)}")
+        if "429" in str(e):
+            raise Exception("Przekroczono limit zapytań do AI. Spróbuj ponownie za chwilę.")
+        elif "500" in str(e):
+            raise Exception("Serwer AI jest tymczasowo niedostępny. Spróbuj ponownie za chwilę.")
         else:
             raise Exception(f"Błąd komunikacji z AI: {str(e)}")
 
     except (KeyError, IndexError, json.JSONDecodeError) as e:
-        logger.error(f"❌ Error parsing API response: {str(e)}")
+        logger.error(f"Error parsing API response: {str(e)}")
         raise Exception(f"Błąd przetwarzania odpowiedzi AI: {str(e)}")
 
 def analyze_cv_score(cv_text, job_description="", language='pl'):
