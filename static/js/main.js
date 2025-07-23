@@ -43,8 +43,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Get analyze buttons - only if they exist
-    const analyzeJobBtn = document.getElementById('analyze-job-btn');
-    const analyzeUrlBtn = document.getElementById('analyze-url-btn');
+    const analyzeJobBtn = document.getElementById('analyzeJobBtn');
+    const analyzeUrlBtn = document.getElementById('analyzeUrlBtn');
 
     // Upload form handler
     if (cvUploadForm) {
@@ -90,6 +90,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Analyze job description button - tylko jeśli istnieje
+    const analyzeJobBtn = document.getElementById('analyzeJobBtn');
     if (analyzeJobBtn) {
         analyzeJobBtn.addEventListener('click', function() {
             analyzeJobDescription();
@@ -97,6 +98,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Analyze URL button - tylko jeśli istnieje  
+    const analyzeUrlBtn = document.getElementById('analyzeUrlBtn');
     if (analyzeUrlBtn) {
         analyzeUrlBtn.addEventListener('click', function() {
             extractFromJobUrl();
@@ -663,7 +665,7 @@ function verifyPayment(paymentIntentId) {
 window.copyOptimizedCV = function(cvText) {
     // Decode escaped characters
     const decodedText = cvText.replace(/\\n/g, '\n').replace(/\\'/g, "'").replace(/\\"/g, '"');
-    
+
     navigator.clipboard.writeText(decodedText).then(() => {
         showSuccess('✅ Zoptymalizowane CV zostało skopiowane do schowka!');
     }).catch(err => {
