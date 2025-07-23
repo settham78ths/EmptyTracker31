@@ -546,13 +546,10 @@ document.addEventListener('DOMContentLoaded', function() {
         if (processButton) {
             processButton.disabled = false;
         }
-        // Show analysis options - zmienione na poprawny selektor
-        const analysisOptionsCard = document.querySelector('.card-body .form-check input[name="optimization-option"]');
-        if (analysisOptionsCard) {
-            const analysisContainer = analysisOptionsCard.closest('.card');
-            if (analysisContainer) {
-                analysisContainer.style.display = 'block';
-            }
+        // Show analysis options - poprawiony selektor
+        const analysisOptions = document.getElementById('analysis-options');
+        if (analysisOptions) {
+            analysisOptions.style.display = 'block';
         }
     }
 

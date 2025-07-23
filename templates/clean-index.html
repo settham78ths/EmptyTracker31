@@ -437,6 +437,36 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Job Information Section -->
+                    <div class="mt-4">
+                        <h6 class="mb-3"><i class="fas fa-briefcase me-2"></i>Informacje o pracy (opcjonalnie)</h6>
+                        
+                        <div class="mb-3">
+                            <label for="job-title" class="form-label">Nazwa stanowiska</label>
+                            <input type="text" class="form-control" id="job-title" placeholder="np. Senior Developer, Specjalista IT, Menedżer Sprzedaży...">
+                            <div class="form-text">Pomoże w lepszym dopasowaniu CV do stanowiska</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="job-description" class="form-label">Opis stanowiska</label>
+                            <textarea class="form-control" id="job-description" rows="6" placeholder="Wklej tutaj opis stanowiska z oferty pracy...
+
+Przykład:
+- Wymagane: wykształcenie wyższe informatyczne
+- Doświadczenie: min. 3 lata w programowaniu
+- Technologie: Java, Spring, MySQL
+- Języki obce: angielski B2
+- Obowiązki: tworzenie aplikacji webowych..."></textarea>
+                            <div class="form-text">Im więcej szczegółów, tym lepsza analiza AI</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="job-url" class="form-label">Link do oferty (opcjonalnie)</label>
+                            <input type="url" class="form-control" id="job-url" placeholder="https://pracuj.pl/praca/...">
+                            <div class="form-text">Możesz wkleić link zamiast ręcznego przepisywania opisu</div>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Analysis Options -->
@@ -446,7 +476,7 @@
                             <i class="fas fa-cogs me-2"></i>
                             Wybierz rodzaj analizy CV
                         </h5>
-                    </div>
+                    </div></div>
 
 
             <!-- Język -->
@@ -476,29 +506,7 @@
                 </div>
             </div>
 
-            <!-- Informacje o pracy -->
-            <div class="card mb-4">
-                <div class="card-header bg-success text-white">
-                    <h6 class="mb-0"><i class="fas fa-briefcase me-2"></i>Informacje o pracy</h6>
-                </div>
-                <div class="card-body">
-                    <div class="mb-3">
-                        <label for="job-title" class="form-label">Stanowisko</label>
-                        <input type="text" class="form-control" id="job-title" placeholder="np. Senior Developer">
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="job-description" class="form-label">Opis stanowiska</label>
-                        <textarea class="form-control" id="job-description" rows="4" placeholder="Wklej opis stanowiska..."></textarea>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="job-url" class="form-label">Link do oferty (opcjonalnie)</label>
-                        <input type="url" class="form-control" id="job-url" placeholder="https://pracuj.pl/praca/...">
-                        <div class="form-text">Link do oferty pracy dla lepszej analizy</div>
-                    </div>
-                </div>
-            </div>
+            
         </div>
 
         <!-- Prawa kolumna: Opcje i wyniki -->
