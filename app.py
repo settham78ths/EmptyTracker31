@@ -1,4 +1,5 @@
 import os
+import sys
 import logging
 from tempfile import mkdtemp
 from datetime import datetime, timedelta
@@ -44,9 +45,9 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__)
 app.secret_key = os.environ.get("SESSION_SECRET", "dev-secret-key")
 
-# Enhanced session security
+# Enhanced session security - development mode
 app.config.update(
-    SESSION_COOKIE_SECURE=True,  # HTTPS only
+    SESSION_COOKIE_SECURE=False,  # Allow HTTP in development
     SESSION_COOKIE_HTTPONLY=True,  # No JavaScript access
     SESSION_COOKIE_SAMESITE='Lax',  # CSRF protection
     PERMANENT_SESSION_LIFETIME=timedelta(hours=24)  # Session timeout
@@ -212,10 +213,25 @@ def login():
         ).first()
 
         if user and user.check_password(form.password.data):
+            # Update last login
+            user.last_login = datetime.utcnow()
+            db.session.commit()
+            
+            # Login user with remember option
             login_user(user, remember=form.remember_me.data)
+            
+            # Force session to be permanent if remember me is checked
+            if form.remember_me.data:
+                session.permanent = True
+            
             next_page = request.args.get('next')
             flash('Zalogowano pomyślnie!', 'success')
-            return redirect(next_page) if next_page else redirect(url_for('index'))
+            
+            # Ensure proper redirect
+            if next_page and next_page.startswith('/'):
+                return redirect(next_page)
+            else:
+                return redirect(url_for('index'))
         else:
             flash('Nieprawidłowa nazwa użytkownika/email lub hasło.', 'error')
 
