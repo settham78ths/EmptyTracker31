@@ -1159,7 +1159,9 @@ def process_cv():
                 # Nie blokujemy odpowiedzi, tylko logujemy błąd
         import time
         start_time = time.time()
-        if 'optimized_cv' in result:
+        
+        # Check if result is a dictionary with optimized_cv key
+        if isinstance(result, dict) and 'optimized_cv' in result:
             from utils.openrouter_api import format_cv_text
             optimized_cv = format_cv_text(result['optimized_cv'])
             session['optimized_cv'] = optimized_cv
@@ -1168,6 +1170,19 @@ def process_cv():
                 'success': True,
                 'optimized_cv': optimized_cv,
                 'improvement_notes': result.get('improvement_notes', ''),
+                'processing_time': f"{time.time() - start_time:.1f}s"
+            })
+        
+        # Check if result is a string (directly optimized CV)
+        elif isinstance(result, str):
+            from utils.openrouter_api import format_cv_text
+            optimized_cv = format_cv_text(result)
+            session['optimized_cv'] = optimized_cv
+
+            return jsonify({
+                'success': True,
+                'optimized_cv': optimized_cv,
+                'improvement_notes': '',
                 'processing_time': f"{time.time() - start_time:.1f}s"
             })
 

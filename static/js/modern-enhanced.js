@@ -21,7 +21,11 @@ async function analyzeJobPosting() {
         return;
     }
 
-    const analyzeJobBtn = document.getElementById('analyzeJobBtn');
+    // Find the analyze button - it might have different IDs
+    let analyzeJobBtn = document.getElementById('analyze-job-btn') || 
+                       document.getElementById('analyzeJobBtn') ||
+                       document.querySelector('[onclick="analyzeJobPosting()"]');
+
     const originalText = analyzeJobBtn.textContent;
 
     try {
@@ -53,8 +57,15 @@ async function analyzeJobPosting() {
         console.error('Error analyzing job posting:', error);
         showNotification('Wystąpił błąd podczas analizy', 'error');
     } finally {
-        analyzeJobBtn.textContent = originalText;
-        analyzeJobBtn.disabled = false;
+        // Restore button state
+        let analyzeJobBtn = document.getElementById('analyze-job-btn') || 
+                           document.getElementById('analyzeJobBtn') ||
+                           document.querySelector('[onclick="analyzeJobPosting()"]');
+
+        if (analyzeJobBtn) {
+            analyzeJobBtn.textContent = originalText;
+            analyzeJobBtn.disabled = false;
+        }
     }
 }
 

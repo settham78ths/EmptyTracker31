@@ -220,11 +220,11 @@ def apply_recruiter_feedback_to_cv(cv_text, recruiter_feedback, job_description=
     """
     Apply recruiter feedback suggestions directly to the CV - PAID FEATURE
     """
-    
+
     if is_premium:
         max_tokens = 6000
         prompt_suffix = """
-        
+
         TRYB PREMIUM - ZASTOSOWANIE POPRAWEK REKRUTERA:
         - Implementuj WSZYSTKIE sugestie z opinii rekrutera
         - Przepisz CV zgodnie z każdą rekomendacją
@@ -235,7 +235,7 @@ def apply_recruiter_feedback_to_cv(cv_text, recruiter_feedback, job_description=
     elif payment_verified:
         max_tokens = 4000  
         prompt_suffix = """
-        
+
         TRYB PŁATNY - ZASTOSOWANIE POPRAWEK:
         - Implementuj główne sugestie z opinii rekrutera
         - Przepisz sekcje zgodnie z rekomendacjami
@@ -464,7 +464,7 @@ def optimize_cv_for_specific_position(cv_text, target_position, job_description,
     - Growth trajectory mapping: jak jego kariera prowadzi do target role
 
     FAZA 3 - STRATEGIC REPOSITIONING:
-    
+
     A) MASTER NARRATIVE CREATION:
     Stwórz spójną historię kariery która:
     - Pokazuje logiczną progresję ku target position
@@ -552,13 +552,13 @@ def optimize_cv_for_specific_position(cv_text, target_position, job_description,
     ✅ Zoptymalizowane: "Koordynowałem procesy magazynowe, optymalizowałem przepływy towarów i zarządzałem dokumentacją logistyczną"
 
     PRZYKŁAD RÓŻNICOWANIA PODOBNYCH STANOWISK:
-    
+
     STANOWISKO 1: "Kurier - DHL" (2022-2023)
     ✅ Opis 1: "Wykonywałem ekspresowe dostawy międzynarodowe, obsługiwałem system śledzenia przesyłek i zapewniałem terminowość dostaw zgodnie z procedurami DHL"
-    
+
     STANOWISKO 2: "Kurier - DPD" (2021-2022)  
     ✅ Opis 2: "Realizowałem dostawy lokalne na terenie miasta, utrzymywałem kontakt z klientami i optymalizowałem trasy dostaw dla maksymalnej efektywności"
-    
+
     STANOWISKO 3: "Kurier - UPS" (2020-2021)
     ✅ Opis 3: "Odpowiadałem za dostawy biznesowe do firm, zarządzałem dokumentacją celną przesyłek zagranicznych i współpracowałem z działem obsługi klienta"
 
@@ -769,7 +769,7 @@ def optimize_cv(cv_text, job_description, language='pl', is_premium=False, payme
     - Przeanalizuj jak różne stanowiska mogą się uzupełniać w narratiwie
 
     KROK 3 - STRATEGICZNA REKONSTRUKCJA:
-    
+
     A) ROZPOZNANIE BRANŻY I POZIOMU:
     Na podstawie CV automatycznie określ:
     - Główną branżę/sektor działalności
@@ -806,12 +806,12 @@ def optimize_cv(cv_text, job_description, language='pl', is_premium=False, payme
     PRZYKŁADY INTELIGENTNEGO REFRAMINGU:
 
     TARGET POSITION: "Specjalista ds. Logistyki"
-    
+
     Oryginał: "Kurier - przewożenie paczek"
     ✅ Smart Reframe: "Koordynowałem procesy dystrybucji przesyłek, optymalizowałem trasy dostaw i zapewniałem terminową realizację zleceń logistycznych zgodnie z procedurami operacyjnymi"
 
     TARGET POSITION: "Junior Developer"
-    
+
     Oryginał: "Kasjer w sklepie"
     ✅ Smart Reframe: "Obsługiwałem system POS, analizowałem dane sprzedażowe, rozwiązywałem problemy techniczne i zapewniałem sprawne funkcjonowanie systemów informatycznych"
 
@@ -901,7 +901,7 @@ def optimize_cv(cv_text, job_description, language='pl', is_premium=False, payme
         - Dodaj profesjonalne podsumowanie zawodowe
         - Uporządkuj umiejętności w logiczne kategorie
         - Zastosuj czytelne i spójne formatowanie
-        
+
     WYMAGANIA FORMATOWANIA:
         - Używaj prawidłowych znaków nowej linii zamiast \\n
         - Pozostaw puste linie między sekcjami dla lepszej czytelności
@@ -919,10 +919,10 @@ def format_cv_text(cv_text):
     """
     if not cv_text:
         return cv_text
-    
+
     # Zastąp \n rzeczywistymi znakami nowej linii
     formatted_text = cv_text.replace('\\n', '\n')
-    
+
     # Dodaj dodatkowe odstępy między głównymi sekcjami
     sections = [
         'DOŚWIADCZENIE ZAWODOWE',
@@ -934,14 +934,14 @@ def format_cv_text(cv_text):
         'SKILLS',
         'EDUCATION'
     ]
-    
+
     for section in sections:
         formatted_text = formatted_text.replace(f'\n{section}', f'\n\n{section}')
-    
+
     # Usuń nadmiarowe puste linie (więcej niż 2 pod rząd)
     while '\n\n\n' in formatted_text:
         formatted_text = formatted_text.replace('\n\n\n', '\n\n')
-    
+
     return formatted_text.strip()
 
 def generate_recruiter_feedback(cv_text, job_description="", language='pl'):
@@ -1297,3 +1297,17 @@ def generate_interview_questions(cv_text, job_description="", language='pl'):
     """
 
     return send_api_request(prompt, max_tokens=2000)
+
+def parse_ai_json_response(ai_result):
+    """
+    Parse JSON response from AI, handling various formats
+    """
+    import json
+    try:
+        logger.debug(f"AI result before parsing: {ai_result[:200]}...")
+
+        # Clean AI result - remove markdown formatting if present
+        clean_result = ai_result
+        if '```json' in clean_result:
+            json_start = clean_result.find('```json') + 7
+            json_end = clean_result.find('
