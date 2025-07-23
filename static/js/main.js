@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Get analyze buttons if they exist
+    // Get analyze buttons - only if they exist
     const analyzeJobBtn = document.getElementById('analyze-job-btn');
     const analyzeUrlBtn = document.getElementById('analyze-url-btn');
 
@@ -89,14 +89,14 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Analyze job description button
+    // Analyze job description button - tylko jeśli istnieje
     if (analyzeJobBtn) {
         analyzeJobBtn.addEventListener('click', function() {
             analyzeJobDescription();
         });
     }
 
-    // Analyze URL button  
+    // Analyze URL button - tylko jeśli istnieje  
     if (analyzeUrlBtn) {
         analyzeUrlBtn.addEventListener('click', function() {
             extractFromJobUrl();
@@ -659,12 +659,26 @@ function verifyPayment(paymentIntentId) {
         showError('Błąd podczas weryfikacji płatności');
     });
 }
-// Copy optimized CV to clipboard
-function copyOptimizedCV(text) {
-    navigator.clipboard.writeText(text).then(() => {
-        showSuccess('Zoptymalizowane CV skopiowane do schowka!');
+// Copy optimized CV to clipboard - global function
+window.copyOptimizedCV = function(cvText) {
+    // Decode escaped characters
+    const decodedText = cvText.replace(/\\n/g, '\n').replace(/\\'/g, "'").replace(/\\"/g, '"');
+    
+    navigator.clipboard.writeText(decodedText).then(() => {
+        showSuccess('✅ Zoptymalizowane CV zostało skopiowane do schowka!');
     }).catch(err => {
-        console.error('Failed to copy text: ', err);
-        showError('Nie udało się skopiować zoptymalizowanego CV.');
+        console.error('Failed to copy text:', err);
+        // Fallback method
+        const textArea = document.createElement('textarea');
+        textArea.value = decodedText;
+        document.body.appendChild(textArea);
+        textArea.select();
+        try {
+            document.execCommand('copy');
+            showSuccess('✅ Zoptymalizowane CV zostało skopiowane do schowka!');
+        } catch (err) {
+            showError('Nie udało się skopiować CV');
+        }
+        document.body.removeChild(textArea);
     });
 }

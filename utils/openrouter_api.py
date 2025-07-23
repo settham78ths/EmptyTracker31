@@ -25,7 +25,11 @@ def send_api_request(prompt, max_tokens=2000, language='pl'):
     """
     if not OPENROUTER_API_KEY:
         logger.error("OpenRouter API key not found")
-        raise ValueError("OpenRouter API key not set in environment variables")
+        raise ValueError("🔑 Brak klucza API OpenRouter! Sprawdź plik .env - powinien zawierać OPENROUTER_API_KEY=twój_klucz")
+    
+    if len(OPENROUTER_API_KEY) < 10:
+        logger.error("OpenRouter API key seems invalid")
+        raise ValueError("🔑 Klucz API OpenRouter wydaje się nieprawidłowy. Sprawdź czy jest kompletny w pliku .env")
 
     # Language-specific system prompts
     language_prompts = {
