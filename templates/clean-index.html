@@ -476,7 +476,68 @@ Przykład:
                             <i class="fas fa-cogs me-2"></i>
                             Wybierz rodzaj analizy CV
                         </h5>
-                    </div></div>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" name="analysis_option" id="optimize-basic" value="optimize" checked>
+                            <label class="form-check-label" for="optimize-basic">
+                                <strong>✨ Optymalizuj CV</strong><br>
+                                <small class="text-muted">Ulepsz CV pod konkretne stanowisko</small>
+                            </label>
+                        </div>
+
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" name="analysis_option" id="ats-check" value="ats_check">
+                            <label class="form-check-label" for="ats-check">
+                                <strong>🤖 Test ATS</strong><br>
+                                <small class="text-muted">Sprawdź kompatybilność z systemami ATS</small>
+                            </label>
+                        </div>
+
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" name="analysis_option" id="grammar-check" value="grammar_check">
+                            <label class="form-check-label" for="grammar-check">
+                                <strong>✏️ Sprawdzenie gramatyki</strong><br>
+                                <small class="text-muted">Korekta językowa i stylistyczna</small>
+                            </label>
+                        </div>
+
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" name="analysis_option" id="feedback-premium" value="feedback">
+                            <label class="form-check-label" for="feedback-premium">
+                                <strong>📋 Opinia rekrutera</strong> <span class="badge bg-warning">Premium</span><br>
+                                <small class="text-muted">Otrzymaj feedback jak od prawdziwego rekrutera</small>
+                            </label>
+                        </div>
+
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" name="analysis_option" id="cover-letter" value="cover_letter">
+                            <label class="form-check-label" for="cover-letter">
+                                <strong>📝 List motywacyjny</strong> <span class="badge bg-warning">Premium</span><br>
+                                <small class="text-muted">Wygeneruj spersonalizowany list</small>
+                            </label>
+                        </div>
+
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" name="analysis_option" id="cv-score" value="cv_score">
+                            <label class="form-check-label" for="cv-score">
+                                <strong>📊 Ocena CV (1-100)</strong> <span class="badge bg-warning">Premium</span><br>
+                                <small class="text-muted">Szczegółowa ocena i rekomendacje</small>
+                            </label>
+                        </div>
+
+                        <button id="process-button" class="btn btn-success w-100 mt-3" disabled>
+                            <i class="fas fa-play me-2"></i>Rozpocznij analizę AI
+                        </button>
+
+                        <div id="processing-indicator" class="text-center mt-3" style="display: none;">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Ładowanie...</span>
+                            </div>
+                            <p class="mt-2 processing-message">Analizuję CV za pomocą AI...</p>
+                        </div>
+                    </div>
+                </div>
 
 
             <!-- Język -->

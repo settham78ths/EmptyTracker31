@@ -85,23 +85,17 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Get analyze buttons - only if they exist
-    const analyzeJobBtn = document.getElementById('analyzeJobBtn');
-    const analyzeUrlBtn = document.getElementById('analyzeUrlBtn');
-
-    // Analyze job description button - tylko jeśli istnieje
-    if (analyzeJobBtn) {
-        analyzeJobBtn.addEventListener('click', function() {
+    // Initialize analyze buttons with event delegation
+    document.addEventListener('click', function(e) {
+        if (e.target.id === 'analyzeJobBtn') {
+            e.preventDefault();
             analyzeJobDescription();
-        });
-    }
-
-    // Analyze URL button - tylko jeśli istnieje  
-    if (analyzeUrlBtn) {
-        analyzeUrlBtn.addEventListener('click', function() {
+        }
+        if (e.target.id === 'analyzeUrlBtn') {
+            e.preventDefault();
             extractFromJobUrl();
-        });
-    }
+        }
+    });
 
     // Upload CV function - optimized
     function uploadCV() {
@@ -503,11 +497,24 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Utility functions
     function showSuccess(message) {
+        console.log('Success:', message);
         if (uploadSuccessAlert) {
             uploadSuccessAlert.textContent = message;
             uploadSuccessAlert.style.display = 'block';
             setTimeout(() => {
                 uploadSuccessAlert.style.display = 'none';
+            }, 5000);
+        } else {
+            // Create temporary success alert if element doesn't exist
+            const alert = document.createElement('div');
+            alert.className = 'alert alert-success position-fixed top-0 end-0 m-3';
+            alert.style.zIndex = '9999';
+            alert.innerHTML = `<i class="fas fa-check-circle me-2"></i>${message}`;
+            document.body.appendChild(alert);
+            setTimeout(() => {
+                if (alert.parentNode) {
+                    alert.parentNode.removeChild(alert);
+                }
             }, 5000);
         }
     }
