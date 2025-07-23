@@ -1,4 +1,4 @@
-// CV Optimizer Pro - Main JavaScript
+// CV Optimizer Pro - Fixed JavaScript
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize variables
     let cvText = '';
@@ -41,6 +41,10 @@ document.addEventListener('DOMContentLoaded', function() {
             currentLanguage = this.value;
         });
     }
+
+    // Analysis buttons - Fixed IDs
+    const analyzeJobBtn = document.getElementById('analyze-job-btn');
+    const analyzeUrlBtn = document.getElementById('analyze-url-btn');
 
     // Upload form handler
     if (cvUploadForm) {
@@ -85,17 +89,20 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Initialize analyze buttons with event delegation
-    document.addEventListener('click', function(e) {
-        if (e.target.id === 'analyzeJobBtn') {
+    // Fixed analyze buttons
+    if (analyzeJobBtn) {
+        analyzeJobBtn.addEventListener('click', function(e) {
             e.preventDefault();
             analyzeJobDescription();
-        }
-        if (e.target.id === 'analyzeUrlBtn') {
+        });
+    }
+
+    if (analyzeUrlBtn) {
+        analyzeUrlBtn.addEventListener('click', function(e) {
             e.preventDefault();
             extractFromJobUrl();
-        }
-    });
+        });
+    }
 
     // Upload CV function - optimized
     function uploadCV() {
@@ -324,7 +331,7 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        showProcessing('Pobieranie opisu z URL...');
+        showProcessing('📥 Pobieranie opisu z URL...');
 
         fetch('/analyze-job-posting', {
             method: 'POST',
@@ -342,7 +349,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (jobDescriptionInput) {
                     jobDescriptionInput.value = data.raw_description || '';
                 }
-                showSuccess('Opis został pobrany z URL!');
+                showSuccess('✅ Opis został pobrany z URL!');
             } else {
                 showError(data.message || 'Błąd podczas pobierania z URL');
             }
@@ -362,12 +369,10 @@ document.addEventListener('DOMContentLoaded', function() {
             cvPreview.style.display = 'block';
         }
         if (cvTextDisplay) {
-            // Dodaj jasne oznaczenie, że to oryginalne CV
             const previewHeader = '<div class="alert alert-info mb-2"><i class="fas fa-info-circle me-2"></i><strong>Podgląd oryginalnego CV</strong> - wybierz opcję analizy poniżej, aby otrzymać zoptymalizowaną wersję</div>';
             cvTextDisplay.innerHTML = previewHeader + '<pre style="white-space: pre-wrap; font-family: inherit; margin: 0;">' + text.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</pre>';
         }
-        
-        // Włącz przycisk przetwarzania po pomyślnym przesłaniu CV
+
         enableProcessing();
     }
 
@@ -376,10 +381,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
         resultContainer.style.display = 'block';
 
-        // Clear previous result first
         resultText.innerHTML = '<div class="spinner-border spinner-border-sm me-2" role="status"></div>Formatowanie wyniku...';
 
-        // Use setTimeout to prevent UI blocking
         setTimeout(() => {
             try {
                 if (typeof result === 'object') {
@@ -388,7 +391,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     resultText.innerHTML = formatTextResult(result);
                 }
 
-                // Scroll to result
                 resultContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
             } catch (error) {
                 resultText.innerHTML = `<div class="alert alert-warning">Błąd formatowania: ${error.message}</div>`;
@@ -397,7 +399,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function displayJobAnalysis(analysis) {
-        // Create or update job analysis display
         let analysisContainer = document.getElementById('job-analysis-container');
         if (!analysisContainer) {
             analysisContainer = document.createElement('div');
@@ -449,7 +450,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (result.optimized_cv || result.improved_cv) {
             const optimizedCV = result.optimized_cv || result.improved_cv;
-            // Escape HTML and quotes for safe display
             const escapedCV = optimizedCV.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
             const safeCV = optimizedCV.replace(/'/g, '\\\'').replace(/"/g, '\\"').replace(/\n/g, '\\n');
 
@@ -505,7 +505,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 uploadSuccessAlert.style.display = 'none';
             }, 5000);
         } else {
-            // Create temporary success alert if element doesn't exist
             const alert = document.createElement('div');
             alert.className = 'alert alert-success position-fixed top-0 end-0 m-3';
             alert.style.zIndex = '9999';
@@ -553,7 +552,6 @@ document.addEventListener('DOMContentLoaded', function() {
         if (processButton) {
             processButton.disabled = false;
         }
-        // Show analysis options - poprawiony selektor
         const analysisOptions = document.getElementById('analysis-options');
         if (analysisOptions) {
             analysisOptions.style.display = 'block';
@@ -561,13 +559,11 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function showPaymentRequired(message) {
-        // Redirect to payment page or show payment modal
         alert(message + '\n\nZostaniesz przekierowany do strony płatności.');
         window.location.href = '/payment-options';
     }
 
     function showPremiumRequired(message) {
-        // Redirect to premium subscription page
         alert(message + '\n\nZostaniesz przekierowany do subskrypcji Premium.');
         window.location.href = '/premium-subscription';
     }
@@ -671,23 +667,24 @@ function verifyPayment(paymentIntentId) {
 }
 // Copy optimized CV to clipboard - global function
 window.copyOptimizedCV = function(cvText) {
-    // Decode escaped characters
     const decodedText = cvText.replace(/\\n/g, '\n').replace(/\\'/g, "'").replace(/\\"/g, '"');
 
     navigator.clipboard.writeText(decodedText).then(() => {
-        showSuccess('✅ Zoptymalizowane CV zostało skopiowane do schowka!');
+        const event = new CustomEvent('showSuccess', { detail: '✅ Zoptymalizowane CV zostało skopiowane do schowka!' });
+        document.dispatchEvent(event);
     }).catch(err => {
         console.error('Failed to copy text:', err);
-        // Fallback method
         const textArea = document.createElement('textarea');
         textArea.value = decodedText;
         document.body.appendChild(textArea);
         textArea.select();
         try {
             document.execCommand('copy');
-            showSuccess('✅ Zoptymalizowane CV zostało skopiowane do schowka!');
+            const event = new CustomEvent('showSuccess', { detail: '✅ Zoptymalizowane CV zostało skopiowane do schowka!' });
+            document.dispatchEvent(event);
         } catch (err) {
-            showError('Nie udało się skopiować CV');
+            const event = new CustomEvent('showError', { detail: 'Nie udało się skopiować CV' });
+            document.dispatchEvent(event);
         }
         document.body.removeChild(textArea);
     });
