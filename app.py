@@ -769,7 +769,19 @@ def generate_ai_cv():
             cv_content = json.loads(ai_cv_content)
         except json.JSONDecodeError:
             # Fallback parsing
-            cv_content = parse_ai_json_response(ai_cv_content)
+            cv_content_str = parse_ai_json_response(ai_cv_content)
+            # Try to parse the string again
+            try:
+                cv_content = json.loads(cv_content_str)
+            except json.JSONDecodeError:
+                # If still fails, create a basic structure
+                cv_content = {
+                    'professional_title': basic_info['targetPosition'],
+                    'professional_summary': 'Doświadczony specjalista z wieloletnim stażem',
+                    'experience_suggestions': [],
+                    'education_suggestions': [],
+                    'skills_list': 'Komunikatywność, Odpowiedzialność, Praca w zespole'
+                }
         
         # Combine basic info with AI-generated content
         complete_cv_data = {
