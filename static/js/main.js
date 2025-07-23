@@ -480,8 +480,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Enhanced URL analysis with better error handling
-    const analyzeUrlBtn = document.getElementById('analyze-url-btn');
+    // CV URL analysis
     if (analyzeUrlBtn) {
         analyzeUrlBtn.addEventListener('click', async function() {
             const jobUrl = document.getElementById('job-url').value;
